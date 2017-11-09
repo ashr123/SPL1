@@ -7,26 +7,26 @@ using namespace std;
 
 File::File(string name, int size) : size(size), setName(name)
 {
-};
+}
 
 int File::getSize()
 {
     return size;
-};
+}
 
-BaseFile::BaseFile(string name)
+BaseFile::BaseFile(string name): name(&name)
 {
 
 }
 
 string BaseFile::getName() const
 {
-	return std::__cxx11::string();
+    return *name;
 }
 
 void BaseFile::setName(string newName)
 {
-
+    *name=newName;
 }
 
 Directory::Directory(string name, Directory *parent)

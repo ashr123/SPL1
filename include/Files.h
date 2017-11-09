@@ -9,7 +9,7 @@ using namespace std;
 class BaseFile
 {
 private:
-	string name;
+	string *name;
 
 public:
 	BaseFile(string name);
