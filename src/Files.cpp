@@ -3,6 +3,7 @@
 //
 
 #include "../include/Files.h"
+
 using namespace std;
 
 File::File(string name, int size) : size(size), setName(name)
@@ -11,25 +12,25 @@ File::File(string name, int size) : size(size), setName(name)
 
 int File::getSize()
 {
-    return size;
+	return size;
 }
 
-BaseFile::BaseFile(string name): name(&name)
+BaseFile::BaseFile(string name) : name(&name)
 {
 
 }
 
 string BaseFile::getName() const
 {
-    return *name;
+	return *name;
 }
 
 void BaseFile::setName(string newName)
 {
-    *name=newName;
+	*name=newName;
 }
 
-Directory::Directory(string name, Directory *parent): setName(name), parent(parent)
+Directory::Directory(string name, Directory *parent) : setName(name), parent(parent)
 {
 }
 
