@@ -20,7 +20,6 @@ public:
 
 class PwdCommand : public BaseCommand
 {
-private:
 public:
 	PwdCommand(string args);
 	void execute(FileSystem &fs); // Every derived class should implement this function according to the document (pdf)
@@ -29,7 +28,6 @@ public:
 
 class CdCommand : public BaseCommand
 {
-private:
 public:
 	CdCommand(string args);
 	void execute(FileSystem &fs);
@@ -38,7 +36,6 @@ public:
 
 class LsCommand : public BaseCommand
 {
-private:
 public:
 	LsCommand(string args);
 	void execute(FileSystem &fs);
@@ -47,7 +44,6 @@ public:
 
 class MkdirCommand : public BaseCommand
 {
-private:
 public:
 	MkdirCommand(string args);
 	void execute(FileSystem &fs);
@@ -56,7 +52,6 @@ public:
 
 class MkfileCommand : public BaseCommand
 {
-private:
 public:
 	MkfileCommand(string args);
 	void execute(FileSystem &fs);
@@ -65,7 +60,6 @@ public:
 
 class CpCommand : public BaseCommand
 {
-private:
 public:
 	CpCommand(string args);
 	void execute(FileSystem &fs);
@@ -74,7 +68,6 @@ public:
 
 class MvCommand : public BaseCommand
 {
-private:
 public:
 	MvCommand(string args);
 	void execute(FileSystem &fs);
@@ -83,7 +76,6 @@ public:
 
 class RenameCommand : public BaseCommand
 {
-private:
 public:
 	RenameCommand(string args);
 	void execute(FileSystem &fs);
@@ -92,7 +84,6 @@ public:
 
 class RmCommand : public BaseCommand
 {
-private:
 public:
 	RmCommand(string args);
 	void execute(FileSystem &fs);
@@ -103,6 +94,7 @@ class HistoryCommand : public BaseCommand
 {
 private:
 	const vector<BaseCommand *> &history;
+
 public:
 	HistoryCommand(string args, const vector<BaseCommand *> &history);
 	void execute(FileSystem &fs);
@@ -112,7 +104,6 @@ public:
 
 class VerboseCommand : public BaseCommand
 {
-private:
 public:
 	VerboseCommand(string args);
 	void execute(FileSystem &fs);
@@ -121,7 +112,6 @@ public:
 
 class ErrorCommand : public BaseCommand
 {
-private:
 public:
 	ErrorCommand(string args);
 	void execute(FileSystem &fs);
@@ -132,6 +122,7 @@ class ExecCommand : public BaseCommand
 {
 private:
 	const vector<BaseCommand *> &history;
+
 public:
 	ExecCommand(string args, const vector<BaseCommand *> &history);
 	void execute(FileSystem &fs);

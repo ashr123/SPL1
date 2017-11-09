@@ -29,29 +29,28 @@ void BaseFile::setName(string newName)
     *name=newName;
 }
 
-Directory::Directory(string name, Directory *parent)
+Directory::Directory(string name, Directory *parent): setName(name), parent(parent)
 {
-
 }
 
 Directory *Directory::getParent() const
 {
-	return nullptr;
+	return parent;
 }
 
 void Directory::setParent(Directory *newParent)
 {
-
+	parent=newParent;
 }
 
 void Directory::addFile(BaseFile *file)
 {
-
+	children.push_back(file);
 }
 
 void Directory::removeFile(string name)
 {
-
+	children.
 }
 
 void Directory::removeFile(BaseFile *file)
@@ -71,7 +70,7 @@ void Directory::sortBySize()
 
 vector<BaseFile *> Directory::getChildren()
 {
-	return vector<BaseFile *>();
+	return children;
 }
 
 int Directory::getSize()

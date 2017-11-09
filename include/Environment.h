@@ -16,11 +16,23 @@ private:
 	FileSystem fs;
 
 public:
-	Environment();
+	//Environment();
 	void start();
-	FileSystem &getFileSystem() const; // Get a reference to the file system
-	void addToHistory(BaseCommand *command); // Add a new command to the history
-	const vector<BaseCommand *> &getHistory() const; // Return a reference to the history of commands
+	/**
+	 * @return a reference to the file system
+	 */
+	FileSystem &getFileSystem() const;
+	
+	/**
+	 * Add a new command to the history
+	 * @param command the command that to be added
+	 */
+	void addToHistory(BaseCommand *command);
+	
+	/**
+	 * @return a reference to the history of commands
+	 */
+	const vector<BaseCommand *> &getHistory() const;
 };
 
 #endif

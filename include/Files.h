@@ -12,8 +12,21 @@ private:
 	string *name;
 
 public:
+	/**
+	 * Constructor
+	 * @param name the name of the file or directory
+	 */
 	BaseFile(string name);
+	
+	/**
+	 * @return the name of the file or directory
+	 */
 	string getName() const;
+	
+	/**
+	 * changes the name of the file or directory
+	 * @param newName the new name to be changed into
+	 */
 	void setName(string newName);
 	virtual int getSize() = 0;
 };
@@ -24,8 +37,17 @@ private:
 	int size;
 
 public:
-	File(string name, int size); // Constructor
-	int getSize(); // Return the size of the file
+	/**
+	 * Constructor
+	 * @param name the name of the file
+	 * @param size the size of the file
+	 */
+	File(string name, int size);
+	
+	/**
+	 * @return the size of the file
+	 */
+	int getSize();
 };
 
 class Directory : public BaseFile
@@ -35,17 +57,66 @@ private:
 	Directory *parent;
 
 public:
-	Directory(string name, Directory *parent); // Constructor
-	Directory *getParent() const; // Return a pointer to the parent of this directory
-	void setParent(Directory *newParent); // Change the parent of this directory
-	void addFile(BaseFile *file); // Add the file to children
-	void removeFile(string name); // Remove the file with the specified name from children
-	void removeFile(BaseFile *file); // Remove the file from children
-	void sortByName(); // Sort children by name alphabetically (not recursively)
-	void sortBySize(); // Sort children by size (not recursively)
-	vector<BaseFile *> getChildren(); // Return children
-	int getSize(); // Return the size of the directory (recursively)
-	string getAbsolutePath();  //Return the path from the root to this
+	/**
+	 *Constructor
+	 * @param name the name of the directory
+	 * @param parent the parent directory
+	 */
+	Directory(string name, Directory *parent);
+	
+	/**
+	 * @return a pointer to the parent of this directory
+	 */
+	Directory *getParent() const;
+	
+	/**
+	 * Change the parent of this directory
+	 * @param newParent the new parent directory
+	 */
+	void setParent(Directory *newParent);
+	
+	/**
+	 * Add the file to children
+	 * @param file the new file to add
+	 */
+	void addFile(BaseFile *file);
+	
+	/**
+	 * Remove the file with the specified name from children
+	 * @param name the name of the file to be removed
+	 */
+	void removeFile(string name);
+	
+	/**
+	 * Remove the file from children
+	 * @param file the file to be removed
+	 */
+	void removeFile(BaseFile *file);
+	
+	/**
+	 * Sort children by name alphabetically (not recursively)
+	 */
+	void sortByName();
+	
+	/**
+	 * Sort children by size (not recursively)
+	 */
+	void sortBySize();
+	
+	/**
+	 * @return children
+	 */
+	vector<BaseFile *> getChildren();
+	
+	/**
+	 * @return  the size of the directory (recursively)
+	 */
+	int getSize();
+	
+	/**
+	 * @return  the path from the root to this
+	 */
+	string getAbsolutePath();
 };
 
 #endif

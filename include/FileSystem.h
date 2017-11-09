@@ -13,9 +13,21 @@ private:
 public:
 	FileSystem();
 	
-	Directory &getRootDirectory() const; // Return reference to the root directory
-	Directory &getWorkingDirectory() const; // Return reference to the working directory
-	void setWorkingDirectory(Directory *newWorkingDirectory); // Change the working directory of the file system
+	/**
+	 * @return reference to the root directory
+	 */
+	Directory &getRootDirectory() const;
+	
+	/**
+	 * @return reference to the working directory
+	 */
+	Directory &getWorkingDirectory() const;
+	
+	/**
+	 * Change the working directory of the file system
+	 * @param newWorkingDirectory the new working directory
+	 */
+	void setWorkingDirectory(Directory *newWorkingDirectory);
 };
 
 #endif
