@@ -5,7 +5,7 @@
 #include "../include/Files.h"
 using namespace std;
 
-File::File(string name, int size): this.size(size), setName(name){
+File::File(string name, int size): size(size), setName(name){
 
 }
 
