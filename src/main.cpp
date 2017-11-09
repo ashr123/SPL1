@@ -6,7 +6,7 @@ unsigned int verbose=0;
 
 int main(int, char **)
 {
-	Environment env;//dfdfdfdfdfdfdfdfdf
+	Environment env;
 	env.start();
 	return 0;
 }
