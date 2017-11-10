@@ -6,6 +6,9 @@
 
 using namespace std;
 
+/**
+ * This is an abstract class for File and Directory
+ */
 class BaseFile
 {
 private:
@@ -31,7 +34,9 @@ public:
 	
 	virtual int getSize() = 0;
 };
-
+/**
+ * Represents a single file in the system
+ */
 class File : public BaseFile
 {
 private:
@@ -51,6 +56,9 @@ public:
 	int getSize();
 };
 
+/**
+ * Represents a single folder in the system
+ */
 class Directory : public BaseFile
 {
 private:

@@ -7,15 +7,6 @@
 
 using namespace std;
 
-File::File(string name, int size) : size(size), setName(name)
-{
-}
-
-int File::getSize()
-{
-	return size;
-}
-
 BaseFile::BaseFile(string name) : name(&name)
 {
 
@@ -31,8 +22,18 @@ void BaseFile::setName(string newName)
 	*name=newName;
 }
 
-Directory::Directory(string name, Directory *parent) : setName(name), parent(parent)
+File::File(string name, int size) : BaseFile(name), size(size)
 {
+}
+
+int File::getSize()
+{
+	return size;
+}
+
+Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent)
+{
+
 }
 
 Directory *Directory::getParent() const
@@ -78,7 +79,7 @@ void Directory::removeFile(BaseFile *file)
 
 void Directory::sortByName()
 {
-	sort(children.begin(), children.end(), [](const BaseFile *&baseFile, const BaseFile *&baseFile1) -> bool
+	sort(children.begin(), children.end(), [](BaseFile *&baseFile, BaseFile *&baseFile1) -> bool
 	{
 		return baseFile->getName()>baseFile1->getName();
 	});
