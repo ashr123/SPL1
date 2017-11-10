@@ -28,6 +28,7 @@ public:
 	 * @param newName the new name to be changed into
 	 */
 	void setName(string newName);
+	
 	virtual int getSize() = 0;
 };
 
@@ -58,7 +59,7 @@ private:
 
 public:
 	/**
-	 *Constructor
+	 * Constructor
 	 * @param name the name of the directory
 	 * @param parent the parent directory
 	 */
@@ -109,12 +110,12 @@ public:
 	vector<BaseFile *> getChildren();
 	
 	/**
-	 * @return  the size of the directory (recursively)
+	 * @return the size of the directory (recursively)
 	 */
 	int getSize();
 	
 	/**
-	 * @return  the path from the root to this
+	 * @return the path from the root to this
 	 */
 	string getAbsolutePath();
 };

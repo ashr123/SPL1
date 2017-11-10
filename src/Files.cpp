@@ -2,6 +2,7 @@
 // Created by roy on 09/11/17.
 //
 
+#include <algorithm>
 #include "../include/Files.h"
 
 using namespace std;
@@ -51,22 +52,44 @@ void Directory::addFile(BaseFile *file)
 
 void Directory::removeFile(string name)
 {
-	children.
+	for (int i=0; i<children.size(); i++)
+	{
+		if (children[i]->getName()==name)
+		{
+			delete children[i];
+			children.erase(children.begin()+i);
+			return;
+		}
+	}
 }
 
 void Directory::removeFile(BaseFile *file)
 {
-
+	for (int i=0; i<children.size(); i++)
+	{
+		if (children[i]==file)
+		{
+			delete children[i];
+			children.erase(children.begin()+i);
+			return;
+		}
+	}
 }
 
 void Directory::sortByName()
 {
-
+	sort(children.begin(), children.end(), [](const BaseFile *&baseFile, const BaseFile *&baseFile1) -> bool
+	{
+		return baseFile->getName()>baseFile1->getName();
+	});
 }
 
 void Directory::sortBySize()
 {
-
+	sort(children.begin(), children.end(), [](BaseFile *&baseFile, BaseFile *&baseFile1) -> bool
+	{
+		return baseFile->getSize()>baseFile1->getSize();
+	});
 }
 
 vector<BaseFile *> Directory::getChildren()
@@ -76,10 +99,15 @@ vector<BaseFile *> Directory::getChildren()
 
 int Directory::getSize()
 {
-	return 0;
+	int sum(0);
+	for (auto &baseFile : children)
+		sum+=baseFile->getSize();
+	return sum;
 }
 
 string Directory::getAbsolutePath()
 {
-	return std::__cxx11::string();
+	if (parent==nullptr)
+		return '/'+getName();
+	return parent->getAbsolutePath()+'/'+getName();
 }
