@@ -11,7 +11,7 @@ void Environment::start()
 
 }
 
-FileSystem &Environment::getFileSystem() const
+FileSystem &Environment::getFileSystem()
 {
 	return fs;
 }

@@ -4,9 +4,6 @@
 
 #include "../include/FileSystem.h"
 
-FileSystem::FileSystem()
-=default;
-
 Directory &FileSystem::getRootDirectory() const
 {
 	return *rootDirectory;
