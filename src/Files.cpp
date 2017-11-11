@@ -9,7 +9,6 @@ using namespace std;
 
 BaseFile::BaseFile(string name) : name(&name)
 {
-
 }
 
 string BaseFile::getName() const
@@ -33,7 +32,6 @@ int File::getSize()
 
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent)
 {
-
 }
 
 Directory *Directory::getParent() const
