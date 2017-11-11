@@ -77,6 +77,7 @@ void Directory::removeFile(BaseFile *file)
 
 void Directory::sortByName()
 {
+	
 	sort(children.begin(), children.end(), [](BaseFile *&baseFile, BaseFile *&baseFile1) -> bool
 	{
 		return baseFile->getName()>baseFile1->getName();

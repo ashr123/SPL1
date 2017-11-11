@@ -13,15 +13,15 @@ void Environment::start()
 
 FileSystem &Environment::getFileSystem() const
 {
-	return <#initializer#>;
+	return fs;
 }
 
 void Environment::addToHistory(BaseCommand *command)
 {
-
+	commandsHistory.push_back(command);
 }
 
 const std::vector<BaseCommand *> &Environment::getHistory() const
 {
-	return <#initializer#>;
+	return commandsHistory;
 }
