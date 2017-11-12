@@ -2,26 +2,26 @@
 // Created by roy on 11/11/17.
 //
 
+#include <iostream>
+#include <cstring>
 #include "../include/Commands.h"
 
-BaseCommand::BaseCommand(string args)
+BaseCommand::BaseCommand(string args) : args(args)
 {
-
 }
 
 string BaseCommand::getArgs() const
 {
-	return std::__cxx11::string();
+	return args;
 }
 
 PwdCommand::PwdCommand(string args) : BaseCommand(args)
 {
-
 }
 
 void PwdCommand::execute(FileSystem &fs)
 {
-
+	cout<<fs.getWorkingDirectory().getAbsolutePath()<<endl;
 }
 
 string PwdCommand::toString() const
@@ -35,7 +35,8 @@ CdCommand::CdCommand(string args) : BaseCommand(args)
 
 void CdCommand::execute(FileSystem &fs)
 {
-
+	string str(getArgs());
+	strtok()
 }
 
 string CdCommand::toString() const
