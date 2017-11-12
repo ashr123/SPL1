@@ -22,7 +22,7 @@ public:
 	/**
 	 * @return a reference to the file system
 	 */
-	FileSystem &getFileSystem();
+	FileSystem &getFileSystem() const;
 	
 	/**
 	 * Add a new command to the history

@@ -54,7 +54,7 @@ public:
 	/**
 	 * @return the size of the file
 	 */
-	int getSize()const ;
+	int getSize() const;
 };
 
 /**

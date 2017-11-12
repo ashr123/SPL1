@@ -9,7 +9,7 @@ BaseCommand::BaseCommand(string args)
 
 }
 
-string BaseCommand::getArgs()
+string BaseCommand::getArgs() const
 {
 	return std::__cxx11::string();
 }
@@ -24,7 +24,7 @@ void PwdCommand::execute(FileSystem &fs)
 
 }
 
-string PwdCommand::toString()
+string PwdCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -38,7 +38,7 @@ void CdCommand::execute(FileSystem &fs)
 
 }
 
-string CdCommand::toString()
+string CdCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -52,7 +52,7 @@ void LsCommand::execute(FileSystem &fs)
 
 }
 
-string LsCommand::toString()
+string LsCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -66,7 +66,7 @@ void MkdirCommand::execute(FileSystem &fs)
 
 }
 
-string MkdirCommand::toString()
+string MkdirCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -80,7 +80,7 @@ void MkfileCommand::execute(FileSystem &fs)
 
 }
 
-string MkfileCommand::toString()
+string MkfileCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -94,7 +94,7 @@ void CpCommand::execute(FileSystem &fs)
 
 }
 
-string CpCommand::toString()
+string CpCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -108,7 +108,7 @@ void MvCommand::execute(FileSystem &fs)
 
 }
 
-string MvCommand::toString()
+string MvCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -122,7 +122,7 @@ void RenameCommand::execute(FileSystem &fs)
 
 }
 
-string RenameCommand::toString()
+string RenameCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -136,7 +136,7 @@ void RmCommand::execute(FileSystem &fs)
 
 }
 
-string RmCommand::toString()
+string RmCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -150,7 +150,7 @@ void HistoryCommand::execute(FileSystem &fs)
 
 }
 
-string HistoryCommand::toString()
+string HistoryCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -165,7 +165,7 @@ void VerboseCommand::execute(FileSystem &fs)
 
 }
 
-string VerboseCommand::toString()
+string VerboseCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -180,7 +180,7 @@ void ErrorCommand::execute(FileSystem &fs)
 
 }
 
-string ErrorCommand::toString()
+string ErrorCommand::toString() const
 {
 	return std::__cxx11::string();
 }
@@ -194,7 +194,7 @@ void ExecCommand::execute(FileSystem &fs)
 
 }
 
-string ExecCommand::toString()
+string ExecCommand::toString() const
 {
 	return std::__cxx11::string();
 }

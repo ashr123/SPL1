@@ -14,11 +14,11 @@ private:
 public:
 	BaseCommand(string args);
 	
-	string getArgs();
+	string getArgs() const;
 	
 	virtual void execute(FileSystem &fs) = 0;
 	
-	virtual string toString() = 0;
+	virtual string toString() const = 0;
 };
 
 class PwdCommand : public BaseCommand
@@ -27,7 +27,7 @@ public:
 	PwdCommand(string args);
 	
 	void execute(FileSystem &fs); // Every derived class should implement this function according to the document (pdf)
-	virtual string toString();
+	virtual string toString() const;
 };
 
 class CdCommand : public BaseCommand
@@ -37,7 +37,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class LsCommand : public BaseCommand
@@ -47,7 +47,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class MkdirCommand : public BaseCommand
@@ -57,7 +57,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class MkfileCommand : public BaseCommand
@@ -67,7 +67,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class CpCommand : public BaseCommand
@@ -77,7 +77,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class MvCommand : public BaseCommand
@@ -87,7 +87,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class RenameCommand : public BaseCommand
@@ -97,7 +97,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class RmCommand : public BaseCommand
@@ -107,7 +107,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class HistoryCommand : public BaseCommand
@@ -120,7 +120,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 
@@ -131,7 +131,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class ErrorCommand : public BaseCommand
@@ -141,7 +141,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 class ExecCommand : public BaseCommand
@@ -154,7 +154,7 @@ public:
 	
 	void execute(FileSystem &fs);
 	
-	string toString();
+	string toString() const;
 };
 
 #endif
