@@ -115,17 +115,17 @@ public:
 	/**
 	 * @return children
 	 */
-	vector<BaseFile *> getChildren();
+	vector<BaseFile *> getChildren() const;
 	
 	/**
 	 * @return the size of the directory (recursively)
 	 */
-	int getSize();
+	int getSize()const;
 	
 	/**
 	 * @return the path from the root to this
 	 */
-	string getAbsolutePath();
+	string getAbsolutePath()const;
 };
 
 #endif

@@ -16,6 +16,7 @@ string BaseCommand::getArgs()
 
 PwdCommand::PwdCommand(string args) : BaseCommand(args)
 {
+    
 }
 
 void PwdCommand::execute(FileSystem &fs)
