@@ -91,12 +91,12 @@ void Directory::sortBySize()
 	});
 }
 
-vector<BaseFile *> Directory::getChildren()
+vector<BaseFile *> Directory::getChildren() const
 {
 	return children;
 }
 
-int Directory::getSize()
+int Directory::getSize() const
 {
 	int sum(0);
 	for (auto &baseFile : children)
@@ -104,7 +104,7 @@ int Directory::getSize()
 	return sum;
 }
 
-string Directory::getAbsolutePath()
+string Directory::getAbsolutePath() const
 {
 	if (parent==nullptr)
 		return '/'+getName();
