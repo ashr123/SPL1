@@ -25,7 +25,7 @@ File::File(string name, int size) : BaseFile(name), size(size)
 {
 }
 
-int File::getSize()
+int File::getSize() const
 {
 	return size;
 }

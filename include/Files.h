@@ -53,7 +53,7 @@ public:
 	/**
 	 * @return the size of the file
 	 */
-	int getSize();
+	int getSize() const;
 };
 
 /**
