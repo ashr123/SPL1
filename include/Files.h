@@ -9,7 +9,7 @@ using namespace std;
 /**
  * This is an abstract class for File and Directory
  */
-class BaseFile
+class BaseFile//TODO Rule of 5
 {
 private:
 	string *name;
@@ -32,8 +32,9 @@ public:
 	 */
 	void setName(string newName);
 	
-	virtual int getSize() = 0;
+	virtual int getSize() const = 0;
 };
+
 /**
  * Represents a single file in the system
  */
@@ -53,13 +54,13 @@ public:
 	/**
 	 * @return the size of the file
 	 */
-	int getSize() const;
+	int getSize()const ;
 };
 
 /**
  * Represents a single folder in the system
  */
-class Directory : public BaseFile
+class Directory : public BaseFile//TODO Rule of 5
 {
 private:
 	vector<BaseFile *> children;
@@ -120,12 +121,12 @@ public:
 	/**
 	 * @return the size of the directory (recursively)
 	 */
-	int getSize()const;
+	int getSize() const;
 	
 	/**
 	 * @return the path from the root to this
 	 */
-	string getAbsolutePath()const;
+	string getAbsolutePath() const;
 };
 
 #endif
