@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <cstring>
+#include <sstream>
 #include "../include/Commands.h"
 
 BaseCommand::BaseCommand(string args) : args(args)
@@ -35,8 +35,24 @@ CdCommand::CdCommand(string args) : BaseCommand(args)
 
 void CdCommand::execute(FileSystem &fs)
 {
-	string str(getArgs());
-	strtok()
+    istringstream str(getArgs());
+    string s;
+    while (getline(str, s, '/')) {
+        if(s=="..")
+        {
+                fs.setWorkingDirectory(fs.getWorkingDirectory().getParent());
+        }
+        else
+            if(s==".")
+            {
+
+            }
+        else
+            {
+                
+            }
+
+    }
 }
 
 string CdCommand::toString() const
