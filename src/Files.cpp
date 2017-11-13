@@ -21,6 +21,12 @@ void BaseFile::setName(string newName)
 	*name=newName;
 }
 
+
+BaseFile::~BaseFile()
+{
+    delete name;
+}
+
 File::File(string name, int size) : BaseFile(name), size(size)
 {
 }

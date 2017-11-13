@@ -33,6 +33,8 @@ public:
 	void setName(string newName);
 	
 	virtual int getSize() const = 0;
+
+    BaseFile::~BaseFile();
 };
 
 /**
