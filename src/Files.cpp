@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <utility>
 #include "../include/Files.h"
 
 using namespace std;
@@ -18,7 +19,7 @@ string BaseFile::getName() const
 
 void BaseFile::setName(string newName)
 {
-	*name=newName;
+	*name=move(newName);
 }
 
 
@@ -27,7 +28,7 @@ BaseFile::~BaseFile()
     delete name;
 }
 
-File::File(string name, int size) : BaseFile(name), size(size)
+File::File(string name, int size) : BaseFile(move(name)), size(size)
 {
 }
 
@@ -46,7 +47,7 @@ bool File::isDir() const
     return false;
 }
 
-Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent)
+Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), parent(parent)
 {
 }
 
