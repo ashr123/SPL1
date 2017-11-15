@@ -8,5 +8,9 @@ int main(int, char **)
 {
 //	Environment env;
 //	env.start();
+	File a("ababa", 3), b("qqqqq", 5),
+			c(a);
+	a=b;
+	a=File("sss", 7);
 	return 0;
 }

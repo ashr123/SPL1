@@ -7,7 +7,7 @@
 
 using namespace std;
 
-BaseFile::BaseFile(string name) : name(&name)
+BaseFile::BaseFile(string name) : name(new string(move(name)))
 {
 }
 
@@ -23,7 +23,7 @@ void BaseFile::setName(string newName)
 
 BaseFile::~BaseFile()
 {
-    clear();
+	clear();
 }
 
 void BaseFile::copy(const BaseFile &other)
@@ -42,7 +42,7 @@ BaseFile::BaseFile(const BaseFile &other)
 	copy(other);
 }
 
-BaseFile::BaseFile(BaseFile &&other): name(other.name)
+BaseFile::BaseFile(BaseFile &&other) : name(other.name)
 {
 	other.name=nullptr;
 }
@@ -82,12 +82,12 @@ int File::getSize() const
 
 bool File::isFile() const
 {
-    return true;
+	return true;
 }
 
 bool File::isDir() const
 {
-    return false;
+	return false;
 }
 
 Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), parent(parent), children()
@@ -173,10 +173,10 @@ string Directory::getAbsolutePath() const
 
 bool Directory::isFile() const
 {
-    return false;
+	return false;
 }
 
 bool Directory::isDir() const
 {
-    return true;
+	return true;
 }
