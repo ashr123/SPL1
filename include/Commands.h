@@ -20,7 +20,6 @@ public:
 	
 	virtual string toString() const = 0;
 
-    Directory* getPath(istringstream str,FileSystem& fs);
 };
 
 class PwdCommand : public BaseCommand
