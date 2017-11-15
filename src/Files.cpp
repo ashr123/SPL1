@@ -63,7 +63,7 @@ BaseFile &BaseFile::operator=(BaseFile &&other)
 	if (this!=&other)
 	{
 		clear();
-		copy(other);
+		name=other.name;
 		other.name=nullptr;
 	}
 	
@@ -90,7 +90,7 @@ bool File::isDir() const
     return false;
 }
 
-Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), parent(parent)
+Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), parent(parent), children()
 {
 }
 
