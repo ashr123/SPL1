@@ -3,7 +3,6 @@
 
 #include <string>
 #include "FileSystem.h"
-#include <cstring>
 
 using namespace std;
 
@@ -20,6 +19,8 @@ public:
 	virtual void execute(FileSystem &fs) = 0;
 	
 	virtual string toString() const = 0;
+
+    Directory* getPath(istringstream str,FileSystem& fs);
 };
 
 class PwdCommand : public BaseCommand

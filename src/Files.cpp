@@ -36,6 +36,16 @@ int File::getSize() const
 	return size;
 }
 
+bool File::isFile() const
+{
+    return true;
+}
+
+bool File::isDir() const
+{
+    return false;
+}
+
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent)
 {
 }
@@ -115,4 +125,14 @@ string Directory::getAbsolutePath() const
 	if (parent==nullptr)
 		return '/'+getName();
 	return parent->getAbsolutePath()+'/'+getName();
+}
+
+bool Directory::isFile() const
+{
+    return false;
+}
+
+bool Directory::isDir() const
+{
+    return true;
 }

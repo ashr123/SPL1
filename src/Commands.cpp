@@ -15,6 +15,54 @@ string BaseCommand::getArgs() const
 	return args;
 }
 
+Directory *BaseCommand::getPath(istringstream str, FileSystem &fs) {
+    string s;
+    getline(str, s, '/');
+    if(s==".."|s==".")
+        do{//Relative path
+            if(s=="..")
+            {
+                fs.setWorkingDirectory(fs.getWorkingDirectory().getParent());
+            }
+            else
+            if(s==".") {
+                string tmp;
+                bool find=false;
+                getline(str, tmp, '/');
+                for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++)
+                    if(fs.getWorkingDirectory().getChildren().at(i)->getName()==tmp)
+                        if(fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
+                            fs.setWorkingDirectory(
+                                    dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
+                            find = true;
+                        }
+                if(!find)
+                    return NULL;
+            }
+            else{
+
+            }
+
+        }while (getline(str, s, '/'));
+    else {//Absolute path
+        fs.setWorkingDirectory(&fs.getRootDirectory());
+        do {
+            bool find=false;
+            for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++)
+                if(fs.getWorkingDirectory().getChildren().at(i)->getName()==s){
+                    if(fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
+                        fs.setWorkingDirectory(
+                                dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
+                        find = true;
+                    }
+                }
+            if(!find)
+                return NULL;
+        }while (getline(str, s, '/'));
+    }
+    return &fs.getWorkingDirectory();
+}
+
 PwdCommand::PwdCommand(string args) : BaseCommand(args)
 {
 }
@@ -29,6 +77,7 @@ string PwdCommand::toString() const
 	return std::__cxx11::string();
 }
 
+
 CdCommand::CdCommand(string args) : BaseCommand(args)
 {
 }
@@ -36,24 +85,10 @@ CdCommand::CdCommand(string args) : BaseCommand(args)
 void CdCommand::execute(FileSystem &fs)
 {
     istringstream str(getArgs());
-    string s;
-    while (getline(str, s, '/')) {
-        if(s=="..")
-        {
-                fs.setWorkingDirectory(fs.getWorkingDirectory().getParent());
-        }
-        else
-            if(s==".")
-            {
-
-            }
-        else
-            {
-                
-            }
-
-    }
+    if(!getPath(str,fs))
+        cout<<"The system cannot find the path specified"<<endl;
 }
+
 
 string CdCommand::toString() const
 {
@@ -66,7 +101,12 @@ LsCommand::LsCommand(string args) : BaseCommand(args)
 
 void LsCommand::execute(FileSystem &fs)
 {
-
+    vector<BaseFile*> vec=fs.getWorkingDirectory().getChildren();
+    for(int i=0;i<vec.size();i++){
+        if(vec.at(i)->isDir());
+            cout<<"DIR"<<"\t"<<vec.at(i)->getName()<<"\t"<<vec.at(i)->getSize()<<endl;
+        cout<<"FILE"<<"\t"<<vec.at(i)->getName()<<"\t"<<vec.at(i)->getSize()<<endl;
+    }
 }
 
 string LsCommand::toString() const

@@ -34,6 +34,10 @@ public:
 	
 	virtual int getSize() const = 0;
 
+    virtual  bool isFile() const = 0;
+
+    virtual  bool isDir() const = 0;
+
     BaseFile::~BaseFile();
 };
 
@@ -57,6 +61,10 @@ public:
 	 * @return the size of the file
 	 */
 	int getSize() const;
+
+    bool isFile() const;
+
+    virtual  bool isDir() const;
 };
 
 /**
@@ -129,6 +137,10 @@ public:
 	 * @return the path from the root to this
 	 */
 	string getAbsolutePath() const;
+
+    bool isFile() const;
+
+    virtual  bool isDir() const;
 };
 
 #endif
