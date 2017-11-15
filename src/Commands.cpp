@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <utility>
 #include "../include/Commands.h"
 
 BaseCommand::BaseCommand(string args) : args(move(args))
@@ -14,11 +13,6 @@ BaseCommand::BaseCommand(string args) : args(move(args))
 string BaseCommand::getArgs() const
 {
 	return args;
-}
-
-Directory *BaseCommand::getPath(istringstream str, FileSystem &fs) {
-
-    return &fs.getWorkingDirectory();
 }
 
 PwdCommand::PwdCommand(string args) : BaseCommand(move(args))
@@ -53,28 +47,29 @@ void CdCommand::execute(FileSystem &fs)
             }
             else
             if(s==".") {
-                bool find=false;
+                bool find = false;
                 getline(str, s, '/');
-                for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++)
-                    if(fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
-                        if(fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
+                for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++){
+                    if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
+                        if (fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
                             fs.setWorkingDirectory(
                                     dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                            find=true;
+                            find = true;
                         }
+            }
                 if(!find)
                     cout<<"The system cannot find the path specified"<<endl;
             }
-            else
-            {
-                bool find=false;
-                for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++)
-                    if(fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
-                        if(fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
+            else {
+                bool find = false;
+                for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++){
+                    if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
+                        if (fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
                             fs.setWorkingDirectory(
                                     dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                            find=true;
+                            find = true;
                         }
+            }
                 if(!find)
                     cout<<"The system cannot find the path specified"<<endl;
             }
@@ -84,14 +79,14 @@ void CdCommand::execute(FileSystem &fs)
         fs.setWorkingDirectory(&fs.getRootDirectory());
         do {
             bool find=false;
-            for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++)
-                if(fs.getWorkingDirectory().getChildren().at(i)->getName()==s){
-                    if(fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
+            for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++) {
+                if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s) {
+                    if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
                         fs.setWorkingDirectory(
                                 dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                        find = true;
-                    }
+                    find = true;
                 }
+            }
             if(!find)
                 cout<<"The system cannot find the path specified"<<endl;
         }while (getline(str, s, '/'));
@@ -130,7 +125,35 @@ MkdirCommand::MkdirCommand(string args) : BaseCommand(move(args))
 
 void MkdirCommand::execute(FileSystem &fs)
 {
+    string s(getArgs());
+    istringstream str(getArgs());
+    if(s.at(0) == '/') {
+        fs.setWorkingDirectory(&fs.getRootDirectory());
+        do {
+            bool find = false;
+            for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++) {
+                if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
+                    if (fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
+                        fs.setWorkingDirectory(
+                                dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
+                        find = true;
+                    }
+            }
+                if(!find)
+                    fs.getWorkingDirectory().addFile(new Directory(s,&fs.getWorkingDirectory()));
 
+        }while (getline(str, s, '/'));
+    }
+    else{
+        bool find=false;
+        for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++) {
+            if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
+                if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+                    find = true;
+        }
+        if(!find)
+            fs.getWorkingDirectory().addFile(new Directory(s,&fs.getWorkingDirectory()));
+    }
 }
 
 string MkdirCommand::toString() const
@@ -144,7 +167,7 @@ MkfileCommand::MkfileCommand(string args) : BaseCommand(move(args))
 
 void MkfileCommand::execute(FileSystem &fs)
 {
-
+    
 }
 
 string MkfileCommand::toString() const
