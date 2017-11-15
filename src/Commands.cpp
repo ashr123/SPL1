@@ -36,61 +36,73 @@ CdCommand::CdCommand(string args) : BaseCommand(move(args))
 
 void CdCommand::execute(FileSystem &fs)
 {
-    istringstream str(getArgs());
-    string s;
-    getline(str, s, '/');
-    if(s==".."|s==".")
-        do{//Relative path
-            if(s=="..")
-            {
-                fs.setWorkingDirectory(fs.getWorkingDirectory().getParent());
-            }
-            else
-            if(s==".") {
-                bool find = false;
-                getline(str, s, '/');
-                for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++){
-                    if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
-                        if (fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
-                            fs.setWorkingDirectory(
-                                    dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                            find = true;
-                        }
-            }
-                if(!find)
-                    cout<<"The system cannot find the path specified"<<endl;
-            }
-            else {
-                bool find = false;
-                for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++){
-                    if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
-                        if (fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
-                            fs.setWorkingDirectory(
-                                    dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                            find = true;
-                        }
-            }
-                if(!find)
-                    cout<<"The system cannot find the path specified"<<endl;
-            }
-
-        }while (getline(str, s, '/'));
-    else {//Absolute path
-        fs.setWorkingDirectory(&fs.getRootDirectory());
-        do {
-            bool find=false;
-            for(int i=0;i<fs.getWorkingDirectory().getChildren().size();i++) {
-                if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s) {
-                    if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
-                        fs.setWorkingDirectory(
-                                dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                    find = true;
-                }
-            }
-            if(!find)
-                cout<<"The system cannot find the path specified"<<endl;
-        }while (getline(str, s, '/'));
-    }
+	istringstream str(getArgs());
+	string s;
+	bool find;
+	getline(str, s, '/');
+	if (s==".." | s==".")
+		do
+		{//Relative path
+			find=false;
+			if (s=="..")
+			{
+				fs.setWorkingDirectory(fs.getWorkingDirectory().getParent());
+			}
+			else
+				if (s==".")
+				{
+					getline(str, s, '/');
+					for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
+					{
+						if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
+							if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+							{
+								fs.setWorkingDirectory(
+										(Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+								find=true;
+							}
+					}
+					if (!find)
+						break;
+				}
+				else
+				{//for name
+					for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
+					{
+						if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
+							if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+							{
+								fs.setWorkingDirectory(
+										(Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+								find=true;
+							}
+					}
+					if (!find)
+						break;
+				}
+			
+		} while (getline(str, s, '/'));
+	else
+	{//Absolute path
+		fs.setWorkingDirectory(&fs.getRootDirectory());
+		do
+		{
+			find=false;
+			for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
+			{
+				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
+				{
+					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+						fs.setWorkingDirectory((Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+					find=true;
+				}
+			}
+			if (!find)
+				break;
+		} while (getline(str, s, '/'));
+	}
+	if (!find)
+		cout<<"The system cannot find the path specified"<<endl;
 }
 
 
@@ -105,13 +117,13 @@ LsCommand::LsCommand(string args) : BaseCommand(move(args))
 
 void LsCommand::execute(FileSystem &fs)
 {
-    vector<BaseFile*> vec=fs.getWorkingDirectory().getChildren();
-    for (auto &i : vec)
-    {
-        if(i->isDir())
-            cout<<"DIR"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
-        cout<<"FILE"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
-    }
+	vector<BaseFile *> vec=fs.getWorkingDirectory().getChildren();
+	for (auto &i : vec)
+	{
+		if (i->isDir())
+			cout<<"DIR"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
+		cout<<"FILE"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
+	}
 }
 
 string LsCommand::toString() const
@@ -125,35 +137,48 @@ MkdirCommand::MkdirCommand(string args) : BaseCommand(move(args))
 
 void MkdirCommand::execute(FileSystem &fs)
 {
-    string s(getArgs());
-    istringstream str(getArgs());
-    if(s.at(0) == '/') {
-        fs.setWorkingDirectory(&fs.getRootDirectory());
-        do {
-            bool find = false;
-            for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++) {
-                if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
-                    if (fs.getWorkingDirectory().getChildren().at(i)->isDir()) {
-                        fs.setWorkingDirectory(
-                                dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)));
-                        find = true;
-                    }
-            }
-                if(!find)
-                    fs.getWorkingDirectory().addFile(new Directory(s,&fs.getWorkingDirectory()));
-
-        }while (getline(str, s, '/'));
-    }
-    else{
-        bool find=false;
-        for (int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++) {
-            if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
-                if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
-                    find = true;
-        }
-        if(!find)
-            fs.getWorkingDirectory().addFile(new Directory(s,&fs.getWorkingDirectory()));
-    }
+	string s(getArgs());
+	istringstream str(getArgs());
+	if (s.at(0)=='/')
+	{
+		fs.setWorkingDirectory(&fs.getRootDirectory());
+		bool isCreated=false;
+		do
+		{
+			bool find=false;
+			for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
+			{
+				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
+					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+					{
+						fs.setWorkingDirectory((Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+						find=true;
+					}
+			}
+			if (!find)
+			{
+				fs.getWorkingDirectory().addFile(new Directory(s, &fs.getWorkingDirectory()));
+				isCreated=true;
+			}
+			
+		} while (getline(str, s, '/'));
+		if (!isCreated)
+			cout<<"The directory already exists"<<endl;
+	}
+	else
+	{
+		bool find=false;
+		for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
+		{
+			if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
+				if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+					find=true;
+		}
+		if (!find)
+			fs.getWorkingDirectory().addFile(new Directory(s, &fs.getWorkingDirectory()));
+		else
+			cout<<"The directory already exists"<<endl;
+	}
 }
 
 string MkdirCommand::toString() const
@@ -167,7 +192,7 @@ MkfileCommand::MkfileCommand(string args) : BaseCommand(move(args))
 
 void MkfileCommand::execute(FileSystem &fs)
 {
-    
+
 }
 
 string MkfileCommand::toString() const
@@ -231,7 +256,8 @@ string RmCommand::toString() const
 	return std::__cxx11::string();
 }
 
-HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)), history(history)
+HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) :
+		BaseCommand(move(args)), history(history)
 {
 }
 

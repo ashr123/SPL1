@@ -28,7 +28,7 @@ BaseFile::~BaseFile()
 
 void BaseFile::copy(const BaseFile &other)
 {
-	name=new string(other.name);
+	name=new string(*other.name);
 }
 
 void BaseFile::clear()
