@@ -4,9 +4,10 @@
 
 #include <iostream>
 #include <sstream>
+#include <utility>
 #include "../include/Commands.h"
 
-BaseCommand::BaseCommand(string args) : args(args)
+BaseCommand::BaseCommand(string args) : args(move(args))
 {
 }
 
@@ -20,7 +21,7 @@ Directory *BaseCommand::getPath(istringstream str, FileSystem &fs) {
     return &fs.getWorkingDirectory();
 }
 
-PwdCommand::PwdCommand(string args) : BaseCommand(args)
+PwdCommand::PwdCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -35,7 +36,7 @@ string PwdCommand::toString() const
 }
 
 
-CdCommand::CdCommand(string args) : BaseCommand(args)
+CdCommand::CdCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -103,17 +104,18 @@ string CdCommand::toString() const
 	return std::__cxx11::string();
 }
 
-LsCommand::LsCommand(string args) : BaseCommand(args)
+LsCommand::LsCommand(string args) : BaseCommand(move(args))
 {
 }
 
 void LsCommand::execute(FileSystem &fs)
 {
     vector<BaseFile*> vec=fs.getWorkingDirectory().getChildren();
-    for(int i=0;i<vec.size();i++){
-        if(vec.at(i)->isDir());
-            cout<<"DIR"<<"\t"<<vec.at(i)->getName()<<"\t"<<vec.at(i)->getSize()<<endl;
-        cout<<"FILE"<<"\t"<<vec.at(i)->getName()<<"\t"<<vec.at(i)->getSize()<<endl;
+    for (auto &i : vec)
+    {
+        if(i->isDir())
+            cout<<"DIR"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
+        cout<<"FILE"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
     }
 }
 
@@ -122,7 +124,7 @@ string LsCommand::toString() const
 	return std::__cxx11::string();
 }
 
-MkdirCommand::MkdirCommand(string args) : BaseCommand(args)
+MkdirCommand::MkdirCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -136,7 +138,7 @@ string MkdirCommand::toString() const
 	return std::__cxx11::string();
 }
 
-MkfileCommand::MkfileCommand(string args) : BaseCommand(args)
+MkfileCommand::MkfileCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -150,7 +152,7 @@ string MkfileCommand::toString() const
 	return std::__cxx11::string();
 }
 
-CpCommand::CpCommand(string args) : BaseCommand(args)
+CpCommand::CpCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -164,7 +166,7 @@ string CpCommand::toString() const
 	return std::__cxx11::string();
 }
 
-MvCommand::MvCommand(string args) : BaseCommand(args)
+MvCommand::MvCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -178,7 +180,7 @@ string MvCommand::toString() const
 	return std::__cxx11::string();
 }
 
-RenameCommand::RenameCommand(string args) : BaseCommand(args)
+RenameCommand::RenameCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -192,7 +194,7 @@ string RenameCommand::toString() const
 	return std::__cxx11::string();
 }
 
-RmCommand::RmCommand(string args) : BaseCommand(args)
+RmCommand::RmCommand(string args) : BaseCommand(move(args))
 {
 }
 
@@ -206,7 +208,7 @@ string RmCommand::toString() const
 	return std::__cxx11::string();
 }
 
-HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(args), history(history)
+HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)), history(history)
 {
 }
 
@@ -220,7 +222,7 @@ string HistoryCommand::toString() const
 	return std::__cxx11::string();
 }
 
-VerboseCommand::VerboseCommand(string args) : BaseCommand(args)
+VerboseCommand::VerboseCommand(string args) : BaseCommand(move(args))
 {
 
 }
@@ -235,7 +237,7 @@ string VerboseCommand::toString() const
 	return std::__cxx11::string();
 }
 
-ErrorCommand::ErrorCommand(string args) : BaseCommand(args)
+ErrorCommand::ErrorCommand(string args) : BaseCommand(move(args))
 {
 
 }
@@ -250,7 +252,7 @@ string ErrorCommand::toString() const
 	return std::__cxx11::string();
 }
 
-ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(args), history(history)
+ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)), history(history)
 {
 }
 
