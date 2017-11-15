@@ -44,7 +44,7 @@ BaseFile::BaseFile(const BaseFile &other)
 
 BaseFile::BaseFile(BaseFile &&other): name(other.name)
 {
-	other=nullptr;
+	other.name=nullptr;
 }
 
 BaseFile &BaseFile::operator=(const BaseFile &other)
