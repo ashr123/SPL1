@@ -3,7 +3,6 @@
 //
 
 #include <algorithm>
-#include <utility>
 #include "../include/Files.h"
 
 using namespace std;
@@ -22,11 +21,55 @@ void BaseFile::setName(string newName)
 	*name=move(newName);
 }
 
-
 BaseFile::~BaseFile()
 {
-    delete name;
+    clear();
 }
+
+void BaseFile::copy(const BaseFile &other)
+{
+	name=new string(other.name);
+}
+
+void BaseFile::clear()
+{
+	delete name;
+	name=nullptr;
+}
+
+BaseFile::BaseFile(const BaseFile &other)
+{
+	copy(other);
+}
+
+BaseFile::BaseFile(BaseFile &&other): name(other.name)
+{
+	other=nullptr;
+}
+
+BaseFile &BaseFile::operator=(const BaseFile &other)
+{
+	if (this!=&other)
+	{
+		clear();
+		copy(other);
+	}
+	
+	return *this;
+}
+
+BaseFile &BaseFile::operator=(BaseFile &&other)
+{
+	if (this!=&other)
+	{
+		clear();
+		copy(other);
+		other.name=nullptr;
+	}
+	
+	return *this;
+}
+
 
 File::File(string name, int size) : BaseFile(move(name)), size(size)
 {

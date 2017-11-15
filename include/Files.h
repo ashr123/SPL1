@@ -13,6 +13,8 @@ class BaseFile//TODO Rule of 5
 {
 private:
 	string *name;
+	void copy(const BaseFile &other);
+	void clear();
 
 public:
 	/**
@@ -20,6 +22,37 @@ public:
 	 * @param name the name of the file or directory
 	 */
 	BaseFile(string name);
+	
+	/**
+	 * Copy Constructor
+	 * @param other the other BaseFile
+	 */
+	BaseFile(const BaseFile &other);
+	
+	/**
+	 * Move Constructor
+	 * @param other the other BaseFile
+	 */
+	BaseFile(BaseFile &&other);
+	
+	/**
+	 * Copy Assignment
+	 * @param other the other BaseFile
+	 * @return this reference (after coping)
+	 */
+	BaseFile &operator=(const BaseFile &other);
+	
+	/**
+	 * Move Assignment
+	 * @param other the other BaseFile
+	 * @return this reference (after assignmenting)
+	 */
+	BaseFile &operator=(BaseFile &&other);
+	
+	/**
+	 * Destructor
+	 */
+	virtual ~BaseFile();
 	
 	/**
 	 * @return the name of the file or directory
@@ -37,8 +70,6 @@ public:
     virtual  bool isFile() const = 0;
 
     virtual  bool isDir() const = 0;
-
-    BaseFile::~BaseFile();
 };
 
 /**
