@@ -26,10 +26,10 @@ BaseFile::~BaseFile()
 	clear();
 }
 
-void BaseFile::copy(const BaseFile &other)
-{
-	name=new string(*other.name);
-}
+//void BaseFile::copy(const BaseFile &other)
+//{
+//	name=new string(*other.name);
+//}
 
 void BaseFile::clear()
 {
@@ -37,9 +37,9 @@ void BaseFile::clear()
 	name=nullptr;
 }
 
-BaseFile::BaseFile(const BaseFile &other)
+BaseFile::BaseFile(const BaseFile &other) : name(new string(*other.name))
 {
-	copy(other);
+	//copy(other);
 }
 
 BaseFile::BaseFile(BaseFile &&other) : name(other.name)
@@ -52,7 +52,8 @@ BaseFile &BaseFile::operator=(const BaseFile &other)
 	if (this!=&other)
 	{
 		clear();
-		copy(other);
+		//copy(other);
+		name=new string(*other.name);
 	}
 	
 	return *this;
@@ -92,6 +93,52 @@ bool File::isDir() const
 
 Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), parent(parent), children()
 {
+}
+
+void Directory::copy(const Directory &other)
+{
+	setName(other.getName());
+	parent=new Directory(*other.parent);
+	children=other.children;
+}
+
+void Directory::clear()
+{
+	for (auto &child : children)
+		delete child;
+}
+
+Directory::Directory(const Directory &other) : BaseFile(other), children(other.children), parent(new Directory(*other.parent))
+{
+}
+
+Directory::Directory(Directory &&other) : BaseFile(move(other)), parent(other.parent), children(move(other.children))
+{
+	other.parent=nullptr;
+}
+
+Directory &Directory::operator=(const Directory &other)
+{
+	if (this!=&other)
+	{
+		clear();
+		//copy(other);
+		parent=new Directory(*other.parent);
+		setName(other.getName());
+		children=other.children;
+	}
+	
+	return *this;
+}
+
+Directory &Directory::operator=(Directory &&other)
+{
+	return <#initializer#>;
+}
+
+Directory::~Directory()
+{
+
 }
 
 Directory *Directory::getParent() const

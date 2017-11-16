@@ -13,8 +13,8 @@ class BaseFile//TODO Rule of 5
 {
 private:
 	string *name;
-	void copy(const BaseFile &other);
-	void clear();
+	//void copy(const BaseFile &other);
+	void clear();//virtual?
 
 public:
 	/**
@@ -106,6 +106,8 @@ class Directory : public BaseFile//TODO Rule of 5
 private:
 	vector<BaseFile *> children;
 	Directory *parent;
+	void copy(const Directory &other);
+	void clear();
 
 public:
 	/**
@@ -114,6 +116,37 @@ public:
 	 * @param parent the parent directory
 	 */
 	Directory(string name, Directory *parent);
+	
+	/**
+	 * Copy Constructor
+	 * @param other the other directory
+	 */
+	Directory(const Directory &other);
+	
+	/**
+	 * Move Constructor
+	 * @param other the other directory
+	 */
+	Directory(Directory &&other);
+	
+	/**
+	 * Copy Assignment
+	 * @param other the other directory
+	 * @return this reference (after coping)
+	 */
+	Directory &operator=(const Directory &other);
+	
+	/**
+	 * Move Assignment
+	 * @param other the other directory
+	 * @return this reference (after assignmenting)
+	 */
+	Directory &operator=(Directory &&other);
+	
+	/**
+	 * Destructor
+	 */
+	virtual ~Directory();
 	
 	/**
 	 * @return a pointer to the parent of this directory
