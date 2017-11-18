@@ -1,15 +1,14 @@
 GREEN=\e[103m\033[1;34m
 NC=\033[0m
-CC=g++
+CC= g++
 CFLAGS=-g -Wall -Weffc++ -std=c++11
-LFLAGS= -L/usr/lib
+LFLAGS=-L/usr/lib
 
-all: Hello
+all: First Hello
 Hello: bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o 
-	@echo 'Building target: Hello'
-	@echo 'Invoking: C++ Linker'
+	@echo -e '\e[105m\033[1;96mInvoking: C++ Linker\033[0m'
 	$(CC) -o bin/Hello bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o $(LFLAGS)
-	@echo 'Finished building target: Hello'
+	@echo -e '\e[105m\033[1;96mFinished building target: Hello\033[0m'
 
 bin/Files.o: src/Files.cpp
 	@echo -e '${GREEN}Compiling target: Files.cpp${NC}'
@@ -36,5 +35,7 @@ bin/Commands.o: src/Commands.cpp
 	$(CC) $(CFLAGS) -c -Iinclude -o bin/Commands.o src/Commands.cpp
 	@echo ''
 
+First:
+	@echo -e '\e[105m\033[1;96mBuilding target: Hello\033[0m'
 clean:
 	rm -f bin/*

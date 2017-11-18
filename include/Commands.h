@@ -1,8 +1,9 @@
 #ifndef COMMANDS_H_
 #define COMMANDS_H_
 
-#include <string>
+
 #include "FileSystem.h"
+#include <string>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
 	
 	virtual string toString() const = 0;
 	
+	virtual ~BaseCommand();
 };
 
 class PwdCommand : public BaseCommand
@@ -111,7 +113,7 @@ public:
 	string toString() const;
 };
 
-class HistoryCommand : public BaseCommand
+class HistoryCommand : public BaseCommand//TODO Rule of 5
 {
 private:
 	const vector<BaseCommand *> &history;
@@ -145,7 +147,7 @@ public:
 	string toString() const;
 };
 
-class ExecCommand : public BaseCommand
+class ExecCommand : public BaseCommand//TODO Rule of 5
 {
 private:
 	const vector<BaseCommand *> &history;

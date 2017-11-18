@@ -15,6 +15,9 @@ string BaseCommand::getArgs() const
 	return args;
 }
 
+BaseCommand::~BaseCommand()
+{}
+
 PwdCommand::PwdCommand(string args) : BaseCommand(move(args))
 {
 }

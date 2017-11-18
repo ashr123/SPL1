@@ -36,7 +36,7 @@ public:
 	
 	virtual bool isDir() const =0;
 	
-	virtual ~BaseFile()=0;
+	virtual ~BaseFile();
 };
 
 /**
@@ -66,7 +66,7 @@ public:
 /**
  * Represents a single folder in the system
  */
-class Directory : public BaseFile//TODO Rule of 5
+class Directory : public BaseFile
 {
 private:
 	vector<BaseFile *> children;

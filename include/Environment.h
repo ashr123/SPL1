@@ -1,7 +1,7 @@
 #ifndef ENVIRONMENT_H_
 #define ENVIRONMENT_H_
 
-#include "Files.h"
+//#include "Files.h"
 #include "Commands.h"
 
 #include <string>
@@ -9,14 +9,31 @@
 
 using namespace std;
 
-class Environment
+class Environment//TODO Rule of 5
 {
 private:
 	vector<BaseCommand *> commandsHistory;
 	FileSystem fs;
+	
+	void copy(const Environment &other);
+	void clear();
 
 public:
-	//Environment();
+	/**
+	 * Constuctor
+	 */
+	Environment();
+	
+	Environment(const Environment &other);
+	
+	Environment(Environment &&other);
+	
+	Environment &operator=(const Environment &other);
+	
+	Environment &operator=(Environment &&other);
+	
+	virtual ~Environment();
+	
 	void start();
 	
 	/**
