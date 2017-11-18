@@ -40,7 +40,7 @@ void CdCommand::execute(FileSystem &fs)
 	string s;
 	bool find;
 	getline(str, s, '/');
-	if (s==".." | s==".")
+	if (s==".." || s==".")
 		do
 		{//Relative path
 			find=false;
@@ -58,7 +58,7 @@ void CdCommand::execute(FileSystem &fs)
 							if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
 							{
 								fs.setWorkingDirectory(
-										(Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+										(Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
 								find=true;
 							}
 					}
@@ -73,7 +73,7 @@ void CdCommand::execute(FileSystem &fs)
 							if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
 							{
 								fs.setWorkingDirectory(
-										(Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+										(Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
 								find=true;
 							}
 					}
@@ -93,7 +93,7 @@ void CdCommand::execute(FileSystem &fs)
 				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
 				{
 					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
-						fs.setWorkingDirectory((Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+						fs.setWorkingDirectory((Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
 					find=true;
 				}
 			}
@@ -151,7 +151,7 @@ void MkdirCommand::execute(FileSystem &fs)
 				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
 					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
 					{
-						fs.setWorkingDirectory((Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+						fs.setWorkingDirectory((Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
 						find=true;
 					}
 			}

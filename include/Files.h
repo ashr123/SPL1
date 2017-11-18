@@ -9,12 +9,10 @@ using namespace std;
 /**
  * This is an abstract class for File and Directory
  */
-class BaseFile//TODO Rule of 5
+class BaseFile
 {
 private:
-	string *name;
-	//void copy(const BaseFile &other);
-	void clear();//virtual?
+	string name;
 
 public:
 	/**
@@ -22,37 +20,6 @@ public:
 	 * @param name the name of the file or directory
 	 */
 	BaseFile(string name);
-	
-	/**
-	 * Copy Constructor
-	 * @param other the other BaseFile
-	 */
-	BaseFile(const BaseFile &other);
-	
-	/**
-	 * Move Constructor
-	 * @param other the other BaseFile
-	 */
-	BaseFile(BaseFile &&other);
-	
-	/**
-	 * Copy Assignment
-	 * @param other the other BaseFile
-	 * @return this reference (after coping)
-	 */
-	BaseFile &operator=(const BaseFile &other);
-	
-	/**
-	 * Move Assignment
-	 * @param other the other BaseFile
-	 * @return this reference (after assignmenting)
-	 */
-	BaseFile &operator=(BaseFile &&other);
-	
-	/**
-	 * Destructor
-	 */
-	virtual ~BaseFile();
 	
 	/**
 	 * @return the name of the file or directory
@@ -65,11 +32,11 @@ public:
 	 */
 	void setName(string newName);
 	
-	virtual int getSize() const = 0;
-
-    virtual  bool isFile() const = 0;
-
-    virtual  bool isDir() const = 0;
+	virtual int getSize() const =0;
+	
+	virtual bool isDir() const =0;
+	
+	virtual ~BaseFile()=0;
 };
 
 /**
@@ -92,10 +59,8 @@ public:
 	 * @return the size of the file
 	 */
 	int getSize() const;
-
-    bool isFile() const;
-
-    virtual  bool isDir() const;
+	
+	virtual bool isDir() const;
 };
 
 /**
@@ -106,7 +71,13 @@ class Directory : public BaseFile//TODO Rule of 5
 private:
 	vector<BaseFile *> children;
 	Directory *parent;
+	
+	/**
+	 * Coping children
+	 * @param other the other Directory
+	 */
 	void copy(const Directory &other);
+	
 	void clear();
 
 public:
@@ -201,10 +172,8 @@ public:
 	 * @return the path from the root to this
 	 */
 	string getAbsolutePath() const;
-
-    bool isFile() const;
-
-    virtual  bool isDir() const;
+	
+	virtual bool isDir() const;
 };
 
 #endif

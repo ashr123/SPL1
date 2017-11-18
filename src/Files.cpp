@@ -7,68 +7,22 @@
 
 using namespace std;
 
-BaseFile::BaseFile(string name) : name(new string(move(name)))
+BaseFile::BaseFile(string name) : name(move(name))
 {
 }
 
 string BaseFile::getName() const
 {
-	return *name;
+	return name;
 }
 
 void BaseFile::setName(string newName)
 {
-	*name=move(newName);
+	name=move(newName);
 }
 
 BaseFile::~BaseFile()
 {
-	clear();
-}
-
-//void BaseFile::copy(const BaseFile &other)
-//{
-//	name=new string(*other.name);
-//}
-
-void BaseFile::clear()
-{
-	delete name;
-	name=nullptr;
-}
-
-BaseFile::BaseFile(const BaseFile &other) : name(new string(*other.name))
-{
-	//copy(other);
-}
-
-BaseFile::BaseFile(BaseFile &&other) : name(other.name)
-{
-	other.name=nullptr;
-}
-
-BaseFile &BaseFile::operator=(const BaseFile &other)
-{
-	if (this!=&other)
-	{
-		clear();
-		//copy(other);
-		name=new string(*other.name);
-	}
-	
-	return *this;
-}
-
-BaseFile &BaseFile::operator=(BaseFile &&other)
-{
-	if (this!=&other)
-	{
-		clear();
-		name=other.name;
-		other.name=nullptr;
-	}
-	
-	return *this;
 }
 
 
@@ -81,25 +35,25 @@ int File::getSize() const
 	return size;
 }
 
-bool File::isFile() const
-{
-	return true;
-}
-
 bool File::isDir() const
 {
 	return false;
 }
 
-Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), parent(parent), children()
+Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), children(), parent(parent)
 {
 }
 
 void Directory::copy(const Directory &other)
 {
-	setName(other.getName());
-	parent=new Directory(*other.parent);
-	children=other.children;
+	for (auto &child : other.children)
+		if (dynamic_cast<Directory *>(child))
+		{
+			children.push_back(new Directory(*(Directory *)child));
+			((Directory *)children[children.size()-1])->setParent(this);
+		}
+		else
+			children.push_back(new File(*(File *)child));
 }
 
 void Directory::clear()
@@ -108,12 +62,14 @@ void Directory::clear()
 		delete child;
 }
 
-Directory::Directory(const Directory &other) : BaseFile(other), children(other.children), parent(new Directory(*other.parent))
+Directory::Directory(const Directory &other) : BaseFile(other), children(), parent(other.parent)
 {
+	copy(other);
 }
 
-Directory::Directory(Directory &&other) : BaseFile(move(other)), parent(other.parent), children(move(other.children))
+Directory::Directory(Directory &&other) : BaseFile(other), children(), parent(other.parent)
 {
+	copy(other);
 	other.parent=nullptr;
 }
 
@@ -122,10 +78,9 @@ Directory &Directory::operator=(const Directory &other)
 	if (this!=&other)
 	{
 		clear();
-		//copy(other);
-		parent=new Directory(*other.parent);
+		copy(other);
+		parent=other.parent;
 		setName(other.getName());
-		children=other.children;
 	}
 	
 	return *this;
@@ -133,12 +88,21 @@ Directory &Directory::operator=(const Directory &other)
 
 Directory &Directory::operator=(Directory &&other)
 {
-	return <#initializer#>;
+	if (this!=&other)
+	{
+		clear();
+		copy(other);
+		parent=other.parent;
+		setName(other.getName());
+		other.parent=nullptr;
+	}
+	
+	return *this;
 }
 
 Directory::~Directory()
 {
-
+	clear();
 }
 
 Directory *Directory::getParent() const
@@ -158,28 +122,24 @@ void Directory::addFile(BaseFile *file)
 
 void Directory::removeFile(string name)
 {
-	for (int i=0; i<children.size(); i++)
-	{
+	for (unsigned int i=0; i<children.size(); i++)
 		if (children[i]->getName()==name)
 		{
 			delete children[i];
 			children.erase(children.begin()+i);
 			return;
 		}
-	}
 }
 
 void Directory::removeFile(BaseFile *file)
 {
-	for (int i=0; i<children.size(); i++)
-	{
+	for (unsigned int i=0; i<children.size(); i++)
 		if (children[i]==file)
 		{
 			delete children[i];
 			children.erase(children.begin()+i);
 			return;
 		}
-	}
 }
 
 void Directory::sortByName()
@@ -216,11 +176,6 @@ string Directory::getAbsolutePath() const
 	if (parent==nullptr)
 		return '/'+getName();
 	return parent->getAbsolutePath()+'/'+getName();
-}
-
-bool Directory::isFile() const
-{
-	return false;
 }
 
 bool Directory::isDir() const
