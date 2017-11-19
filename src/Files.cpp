@@ -73,9 +73,9 @@ Directory::Directory(const Directory &other) : BaseFile(other), children(), pare
 	copy(other);
 }
 
-Directory::Directory(Directory &&other) : BaseFile(other), children(), parent(other.parent)
+Directory::Directory(Directory &&other) : BaseFile(other), children(other.children), parent(other.parent)
 {
-	copy(other);
+	//copy(other);
 	other.parent=nullptr;
 }
 

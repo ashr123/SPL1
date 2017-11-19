@@ -10,6 +10,9 @@ class FileSystem//TODO Rule of 5
 private:
 	Directory *rootDirectory;
 	Directory *workingDirectory;
+	
+	void copy(const FileSystem &other);
+	void clear();
 public:
 	FileSystem();
 	

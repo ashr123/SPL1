@@ -1,7 +1,6 @@
 #ifndef COMMANDS_H_
 #define COMMANDS_H_
 
-
 #include "FileSystem.h"
 #include <string>
 
@@ -17,6 +16,10 @@ public:
 	
 	string getArgs() const;
 	
+	/**
+	 * Every derived class should implement this function according to the document (pdf)
+	 * @param fs the current file system
+	 */
 	virtual void execute(FileSystem &fs) = 0;
 	
 	virtual string toString() const = 0;
@@ -31,7 +34,7 @@ class PwdCommand : public BaseCommand
 public:
 	PwdCommand(string args);
 	
-	void execute(FileSystem &fs); // Every derived class should implement this function according to the document (pdf)
+	void execute(FileSystem &fs);
 	virtual string toString() const;
 	
 	virtual BaseCommand *clone() const;

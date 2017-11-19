@@ -24,12 +24,30 @@ public:
 	 */
 	Environment();
 	
+	/**
+	 * Copy constructor
+	 * @param other the other environment
+	 */
 	Environment(const Environment &other);
 	
+	/**
+	 * Move constructor
+	 * @param other the other environment
+	 */
 	Environment(Environment &&other);
 	
+	/**
+	 * Copy operator
+	 * @param other the other environment
+	 * @return this reference
+	 */
 	Environment &operator=(const Environment &other);
 	
+	/**
+	 * Move operator
+	 * @param other the other environment
+	 * @return this reference
+	 */
 	Environment &operator=(Environment &&other);
 	
 	virtual ~Environment();

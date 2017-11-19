@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include "../include/Commands.h"
+#include "../include/GlobalVariables.h"
 
 BaseCommand::BaseCommand(string args) : args(move(args))
 {
@@ -29,7 +30,7 @@ void PwdCommand::execute(FileSystem &fs)
 
 string PwdCommand::toString() const
 {
-	return std::__cxx11::string();  
+	return "pwd "+getArgs();
 }
 
 BaseCommand * PwdCommand::clone() const
@@ -116,7 +117,7 @@ void CdCommand::execute(FileSystem &fs)
 
 string CdCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "cd "+getArgs();
 }
 
 BaseCommand *CdCommand::clone() const
@@ -141,7 +142,7 @@ void LsCommand::execute(FileSystem &fs)
 
 string LsCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "ls "+getArgs();
 }
 
 BaseCommand *LsCommand::clone() const
@@ -202,7 +203,7 @@ void MkdirCommand::execute(FileSystem &fs)
 
 string MkdirCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "mkdir "+getArgs();
 }
 
 BaseCommand *MkdirCommand::clone() const
@@ -252,7 +253,7 @@ void MkfileCommand::execute(FileSystem &fs)
 
 string MkfileCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "mkfile "+getArgs();
 }
 
 BaseCommand *MkfileCommand::clone() const
@@ -271,7 +272,7 @@ void CpCommand::execute(FileSystem &fs)
 
 string CpCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "cp "+getArgs();
 }
 
 BaseCommand *CpCommand::clone() const
@@ -290,7 +291,7 @@ void MvCommand::execute(FileSystem &fs)
 
 string MvCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "mv "+getArgs();
 }
 
 BaseCommand *MvCommand::clone() const
@@ -311,7 +312,7 @@ void RenameCommand::execute(FileSystem &fs)
 
 string RenameCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "rename "+getArgs();
 }
 
 BaseCommand *RenameCommand::clone() const
@@ -330,7 +331,7 @@ void RmCommand::execute(FileSystem &fs)
 
 string RmCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "rm "+getArgs();
 }
 
 BaseCommand *RmCommand::clone() const
@@ -345,12 +346,13 @@ HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history
 
 void HistoryCommand::execute(FileSystem &fs)
 {
-
+	for (unsigned int i=0; i<history.size(); i++)
+		cout<<i<<'\t'<<history[i]->toString()<<endl;
 }
 
 string HistoryCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "history";
 }
 
 BaseCommand *HistoryCommand::clone() const
@@ -365,12 +367,16 @@ VerboseCommand::VerboseCommand(string args) : BaseCommand(move(args))
 
 void VerboseCommand::execute(FileSystem &fs)
 {
-
+	int temp=stoi(getArgs(), nullptr, 10);
+	if (temp<0 || temp>3)
+		cout<<"Wrong verbose input"<<endl;
+	else
+		verbose=static_cast<unsigned int>(temp);
 }
 
 string VerboseCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "verbose "+getArgs();
 }
 
 BaseCommand *VerboseCommand::clone() const
@@ -385,12 +391,12 @@ ErrorCommand::ErrorCommand(string args) : BaseCommand(move(args))
 
 void ErrorCommand::execute(FileSystem &fs)
 {
-
+	cout<<getArgs()<<": Unknown command"<<endl;
 }
 
 string ErrorCommand::toString() const
 {
-	return std::__cxx11::string();
+	return getArgs();
 }
 
 BaseCommand *ErrorCommand::clone() const
@@ -404,12 +410,16 @@ ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : Ba
 
 void ExecCommand::execute(FileSystem &fs)
 {
-
+	int temp=stoi(getArgs(), nullptr, 10);
+	if (temp<0 || temp>=history.size())
+		cout<<"Command not found"<<endl;
+	else
+		history[temp]->execute(fs);
 }
 
 string ExecCommand::toString() const
 {
-	return std::__cxx11::string();
+	return "exex "+getArgs();
 }
 
 BaseCommand *ExecCommand::clone() const

@@ -45,36 +45,43 @@ void Environment::clear()
 
 Environment::Environment() : commandsHistory(), fs()
 {
-
 }
 
-Environment::Environment(const Environment &other) : commandsHistory(), fs(other.fs)
+Environment::Environment(const Environment &other) : commandsHistory(), fs(other.fs)//<-coping fs
 {
-	clear();
+	//clear();
 	copy(other);
 }
 
-Environment::Environment(Environment &&other) : commandsHistory(), fs(other.fs)//?
+Environment::Environment(Environment &&other) : commandsHistory(other.commandsHistory), fs(other.fs)
 {
-	copy(other);
-	//other=nullptr;//?
 }
 
 Environment &Environment::operator=(const Environment &other)
 {
-	
+	if (this!=&other)
+	{
+		clear();
+		copy(other);
+		fs=FileSystem(other.fs);
+	}
 	
 	return *this;
 }
 
 Environment &Environment::operator=(Environment &&other)
 {
-	
+	if (this!=&other)
+	{
+		clear();
+		commandsHistory=other.commandsHistory;
+		fs=other.fs;
+	}
 	
 	return *this;
 }
 
 Environment::~Environment()
 {
-
+	clear();
 }
