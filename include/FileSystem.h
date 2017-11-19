@@ -11,7 +11,7 @@ private:
 	Directory *rootDirectory;
 	Directory *workingDirectory;
 public:
-	//FileSystem();
+	FileSystem();
 	
 	/**
 	 * @return reference to the root directory

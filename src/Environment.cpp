@@ -57,6 +57,7 @@ Environment::Environment(const Environment &other) : commandsHistory(), fs(other
 Environment::Environment(Environment &&other) : commandsHistory(), fs(other.fs)//?
 {
 	copy(other);
+	//other=nullptr;//?
 }
 
 Environment &Environment::operator=(const Environment &other)

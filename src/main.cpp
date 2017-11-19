@@ -12,11 +12,15 @@ int main(int, char **)
 //			c(a);
 //	a=b;
 //	a=File("sss", 7);
-	Directory *directory=new Directory("first", nullptr);
-	directory->addFile(new Directory("second", directory));
-	directory->addFile(new Directory("third", directory));
-	cout<<directory->getName()<<endl;
-	//directory->removeFile(directory->getChildren()[0]);
-	delete directory;
+//	Directory *directory=new Directory("first", nullptr);
+//	directory->addFile(new Directory("second", directory));
+//	directory->addFile(new Directory("third", directory));
+//	cout<<directory->getName()<<endl;
+//	//directory->removeFile(directory->getChildren()[0]);
+//	delete directory;
+	
+	FileSystem fileSystem;
+	MkdirCommand mkdirCommand("/first/second/third");
+	mkdirCommand.execute(fileSystem);
 	return 0;
 }
