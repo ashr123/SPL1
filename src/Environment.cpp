@@ -33,11 +33,11 @@ void Environment::copy(const Environment &other)
 
 void Environment::clear()
 {
-	for (int i=0; i<commandsHistory.size(); ++i)
-	{
-		delete commandsHistory[i];
-		commandsHistory.erase(commandsHistory.begin()+i);
-	}
+//	for (int i=0; i<commandsHistory.size(); ++i)
+//	{
+//		delete commandsHistory[i];
+//		commandsHistory.erase(commandsHistory.begin()+i);
+//	}
 	for (auto &command : commandsHistory)
 		delete command;
 	commandsHistory.erase(commandsHistory.begin(), commandsHistory.end());
