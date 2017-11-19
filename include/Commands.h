@@ -22,6 +22,8 @@ public:
 	virtual string toString() const = 0;
 	
 	virtual ~BaseCommand();
+	
+	virtual BaseCommand *clone() const =0;
 };
 
 class PwdCommand : public BaseCommand
@@ -31,6 +33,8 @@ public:
 	
 	void execute(FileSystem &fs); // Every derived class should implement this function according to the document (pdf)
 	virtual string toString() const;
+	
+	virtual BaseCommand *clone() const;
 };
 
 class CdCommand : public BaseCommand
@@ -41,6 +45,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class LsCommand : public BaseCommand
@@ -51,6 +57,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class MkdirCommand : public BaseCommand
@@ -61,6 +69,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class MkfileCommand : public BaseCommand
@@ -71,6 +81,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class CpCommand : public BaseCommand
@@ -81,6 +93,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class MvCommand : public BaseCommand
@@ -91,6 +105,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class RenameCommand : public BaseCommand
@@ -101,6 +117,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class RmCommand : public BaseCommand
@@ -111,6 +129,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class HistoryCommand : public BaseCommand//TODO Rule of 5
@@ -124,6 +144,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 
@@ -135,6 +157,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class ErrorCommand : public BaseCommand
@@ -145,6 +169,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 class ExecCommand : public BaseCommand//TODO Rule of 5
@@ -158,6 +184,8 @@ public:
 	void execute(FileSystem &fs);
 	
 	string toString() const;
+	
+	virtual BaseCommand * clone() const;
 };
 
 #endif

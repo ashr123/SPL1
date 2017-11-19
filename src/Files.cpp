@@ -60,6 +60,12 @@ void Directory::clear()
 {
 	for (auto &child : children)
 		delete child;
+//	for (unsigned int i=0; i<children.size(); i++)
+//	{
+//		delete children[i];
+//		children.erase(children.begin());
+//	}
+	children.erase(children.begin(), children.end());
 }
 
 Directory::Directory(const Directory &other) : BaseFile(other), children(), parent(other.parent)

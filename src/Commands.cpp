@@ -32,6 +32,11 @@ string PwdCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand * PwdCommand::clone() const
+{
+	return new PwdCommand(getArgs());
+}
+
 
 CdCommand::CdCommand(string args) : BaseCommand(move(args))
 {
@@ -114,6 +119,11 @@ string CdCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand *CdCommand::clone() const
+{
+	return new CdCommand(getArgs());
+}
+
 LsCommand::LsCommand(string args) : BaseCommand(move(args))
 {
 }
@@ -132,6 +142,11 @@ void LsCommand::execute(FileSystem &fs)
 string LsCommand::toString() const
 {
 	return std::__cxx11::string();
+}
+
+BaseCommand *LsCommand::clone() const
+{
+	return new LsCommand(getArgs());
 }
 
 MkdirCommand::MkdirCommand(string args) : BaseCommand(move(args))
@@ -189,6 +204,11 @@ string MkdirCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand *MkdirCommand::clone() const
+{
+	return new MkdirCommand(getArgs());
+}
+
 MkfileCommand::MkfileCommand(string args) : BaseCommand(move(args))
 {
 }
@@ -201,6 +221,11 @@ void MkfileCommand::execute(FileSystem &fs)
 string MkfileCommand::toString() const
 {
 	return std::__cxx11::string();
+}
+
+BaseCommand *MkfileCommand::clone() const
+{
+	return new MkfileCommand(getArgs());
 }
 
 CpCommand::CpCommand(string args) : BaseCommand(move(args))
@@ -217,6 +242,11 @@ string CpCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand *CpCommand::clone() const
+{
+	return new CpCommand(getArgs());
+}
+
 MvCommand::MvCommand(string args) : BaseCommand(move(args))
 {
 }
@@ -229,6 +259,11 @@ void MvCommand::execute(FileSystem &fs)
 string MvCommand::toString() const
 {
 	return std::__cxx11::string();
+}
+
+BaseCommand *MvCommand::clone() const
+{
+	return new MvCommand(getArgs());
 }
 
 RenameCommand::RenameCommand(string args) : BaseCommand(move(args))
@@ -245,6 +280,11 @@ string RenameCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand *RenameCommand::clone() const
+{
+	return new RenameCommand(getArgs());
+}
+
 RmCommand::RmCommand(string args) : BaseCommand(move(args))
 {
 }
@@ -257,6 +297,11 @@ void RmCommand::execute(FileSystem &fs)
 string RmCommand::toString() const
 {
 	return std::__cxx11::string();
+}
+
+BaseCommand *RmCommand::clone() const
+{
+	return new RmCommand(getArgs());
 }
 
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) :
@@ -274,6 +319,11 @@ string HistoryCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand *HistoryCommand::clone() const
+{
+	return new HistoryCommand(getArgs(), history);
+}
+
 VerboseCommand::VerboseCommand(string args) : BaseCommand(move(args))
 {
 
@@ -287,6 +337,11 @@ void VerboseCommand::execute(FileSystem &fs)
 string VerboseCommand::toString() const
 {
 	return std::__cxx11::string();
+}
+
+BaseCommand *VerboseCommand::clone() const
+{
+	return new VerboseCommand(getArgs());
 }
 
 ErrorCommand::ErrorCommand(string args) : BaseCommand(move(args))
@@ -304,6 +359,11 @@ string ErrorCommand::toString() const
 	return std::__cxx11::string();
 }
 
+BaseCommand *ErrorCommand::clone() const
+{
+	return new ErrorCommand(getArgs());
+}
+
 ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)), history(history)
 {
 }
@@ -316,4 +376,9 @@ void ExecCommand::execute(FileSystem &fs)
 string ExecCommand::toString() const
 {
 	return std::__cxx11::string();
+}
+
+BaseCommand *ExecCommand::clone() const
+{
+	return new ExecCommand(getArgs(), history);
 }

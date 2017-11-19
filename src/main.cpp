@@ -14,7 +14,9 @@ int main(int, char **)
 //	a=File("sss", 7);
 	Directory *directory=new Directory("first", nullptr);
 	directory->addFile(new Directory("second", directory));
+	directory->addFile(new Directory("third", directory));
 	cout<<directory->getName()<<endl;
-	directory->removeFile(directory->getChildren()[0]);
+	//directory->removeFile(directory->getChildren()[0]);
+	delete directory;
 	return 0;
 }

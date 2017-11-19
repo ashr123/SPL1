@@ -28,79 +28,19 @@ const std::vector<BaseCommand *> &Environment::getHistory() const
 void Environment::copy(const Environment &other)
 {
 	for (auto &command : other.commandsHistory)
-	{
-		if (dynamic_cast<PwdCommand *>(command))
-		{
-			commandsHistory.push_back(new PwdCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<CdCommand *>(command))
-		{
-			commandsHistory.push_back(new CdCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<LsCommand *>(command))
-		{
-			commandsHistory.push_back(new LsCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<MkdirCommand *>(command))
-		{
-			commandsHistory.push_back(new MkdirCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<MkfileCommand *>(command))
-		{
-			commandsHistory.push_back(new MkfileCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<CpCommand *>(command))
-		{
-			commandsHistory.push_back(new CpCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<MvCommand *>(command))
-		{
-			commandsHistory.push_back(new MvCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<RenameCommand *>(command))
-		{
-			commandsHistory.push_back(new RenameCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<RmCommand *>(command))
-		{
-			commandsHistory.push_back(new RmCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<HistoryCommand *>(command))
-		{
-			commandsHistory.push_back(new HistoryCommand(*(HistoryCommand *)command));
-			return;
-		}
-		if (dynamic_cast<VerboseCommand *>(command))
-		{
-			commandsHistory.push_back(new VerboseCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<ErrorCommand *>(command))
-		{
-			commandsHistory.push_back(new ErrorCommand(command->getArgs()));
-			return;
-		}
-		if (dynamic_cast<ExecCommand *>(command))
-		{
-			commandsHistory.push_back(new ExecCommand(*(ExecCommand *)command));
-			return;
-		}
-	}
+		commandsHistory.push_back(command->clone());
 }
 
 void Environment::clear()
 {
-	for (auto &commnad : commandsHistory)
-		delete commnad;
+	for (int i=0; i<commandsHistory.size(); ++i)
+	{
+		delete commandsHistory[i];
+		commandsHistory.erase(commandsHistory.begin()+i);
+	}
+	for (auto &command : commandsHistory)
+		delete command;
+	commandsHistory.erase(commandsHistory.begin(), commandsHistory.end());
 }
 
 Environment::Environment() : commandsHistory(), fs()
@@ -108,14 +48,15 @@ Environment::Environment() : commandsHistory(), fs()
 
 }
 
-Environment::Environment(const Environment &other) : commandsHistory(), fs()
+Environment::Environment(const Environment &other) : commandsHistory(), fs(other.fs)
 {
-
+	clear();
+	copy(other);
 }
 
-Environment::Environment(Environment &&other) : commandsHistory(), fs()
+Environment::Environment(Environment &&other) : commandsHistory(), fs(other.fs)//?
 {
-
+	copy(other);
 }
 
 Environment &Environment::operator=(const Environment &other)
