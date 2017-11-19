@@ -29,7 +29,7 @@ void PwdCommand::execute(FileSystem &fs)
 
 string PwdCommand::toString() const
 {
-	return std::__cxx11::string();
+	return std::__cxx11::string();  
 }
 
 BaseCommand * PwdCommand::clone() const
@@ -155,48 +155,49 @@ MkdirCommand::MkdirCommand(string args) : BaseCommand(move(args))
 
 void MkdirCommand::execute(FileSystem &fs)
 {
-	string s(getArgs());
-	istringstream str(getArgs());
-	if (s.at(0)=='/')
-	{
-		fs.setWorkingDirectory(&fs.getRootDirectory());
-		bool isCreated=false;
-		do
-		{
-			bool find=false;
-			for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
-			{
-				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
-					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
-					{
-						fs.setWorkingDirectory((Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
-						find=true;
-					}
-			}
-			if (!find)
-			{
-				fs.getWorkingDirectory().addFile(new Directory(s, &fs.getWorkingDirectory()));
-				isCreated=true;
-			}
-			
-		} while (getline(str, s, '/'));
-		if (!isCreated)
-			cout<<"The directory already exists"<<endl;
-	}
-	else
-	{
-		bool find=false;
-		for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
-		{
-			if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
-				if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
-					find=true;
-		}
-		if (!find)
-			fs.getWorkingDirectory().addFile(new Directory(s, &fs.getWorkingDirectory()));
-		else
-			cout<<"The directory already exists"<<endl;
-	}
+    vector<string> c;
+    istringstream str(getArgs());
+    string s(getArgs());
+    Directory* curr;
+    if(s[0]=='/')//Absolute path
+    {
+        curr = &fs.getRootDirectory();
+        getline(str, s, '/');
+    }
+    else
+        curr = &fs.getWorkingDirectory();
+        while(getline(str,s,'/'))
+            c.push_back(s);
+        bool find= false, exist=false;
+        for(int i=0;i<c.size();i++)
+        {
+            if(c[i]=="..")
+            {
+                if(curr->getParent()==NULL) {
+                    cout << "The system cannot find the path specified" << endl;
+                    break;
+                }
+                curr = curr->getParent();
+                i++;
+            }
+            for(int j=0;j<curr->getChildren().size();j++)
+                if(curr->getChildren()[j]->getName()==c[i]) {
+                    exist=true;
+                    if(curr->getChildren()[j]->isDir()) {
+                        curr = (Directory *) curr->getChildren()[j];
+                        find = true;
+                        if(i==c.size())
+                            cout<<"The directory already exists"<<endl;
+                    }
+                }
+            if(!find & !exist)
+            {
+                curr->addFile(new Directory(c[i],curr));
+                curr=(Directory*)curr->getChildren()[curr->getChildren().size()-1];
+            }
+
+        }
+
 }
 
 string MkdirCommand::toString() const
@@ -215,7 +216,38 @@ MkfileCommand::MkfileCommand(string args) : BaseCommand(move(args))
 
 void MkfileCommand::execute(FileSystem &fs)
 {
-
+//    string s;
+//    istringstream str(getArgs()),t;
+//    getline(str,s,' ');
+//    if(s[0] != '/')
+//        fs.getWorkingDirectory().addFile(new File(s,(int)getline(str,s,' ')));
+//    else {
+//        fs.setWorkingDirectory(&fs.getRootDirectory());
+//        while (getline(str, s, '/')) {
+//            for (unsigned int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++) {
+//                if ((fs.getWorkingDirectory().getChildren().at(i)->getName() == s) &
+//                    (fs.getWorkingDirectory().getChildren().at(i)->isDir()))
+//                    fs.setWorkingDirectory((Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+//                else {
+//                    if (s.at(s.size() - 1) >= 0 | s.at(s.size() - 1) <= 9) {
+//                        bool find = false;
+//                        istringstream k(s);
+//                        getline(k, s, ' ');
+//                        for (unsigned int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++)
+//                            if ((fs.getWorkingDirectory().getChildren().at(i)->getName() == s) &
+//                                (!fs.getWorkingDirectory().getChildren().at(i)->isDir()))
+//                                find = true;
+//                        if (!find)
+//                            fs.getWorkingDirectory().addFile(
+//                                    new File(s, (int) getline(k, s, ' ')));//needs to check the casting
+//                        else
+//                            cout << "File already exists" << endl;
+//                    } else
+//                        cout << "The system cannot find the path specified" << endl;
+//                }
+//            }
+//        }
+//    }
 }
 
 string MkfileCommand::toString() const
@@ -272,6 +304,8 @@ RenameCommand::RenameCommand(string args) : BaseCommand(move(args))
 
 void RenameCommand::execute(FileSystem &fs)
 {
+    string s;
+    istringstream str(getArgs());
 
 }
 

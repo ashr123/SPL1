@@ -19,6 +19,6 @@ void FileSystem::setWorkingDirectory(Directory *newWorkingDirectory)
 	workingDirectory=newWorkingDirectory;
 }
 
-FileSystem::FileSystem() : rootDirectory(new Directory("first", nullptr)), workingDirectory(rootDirectory)
+FileSystem::FileSystem() : rootDirectory(new Directory("/", nullptr)), workingDirectory(rootDirectory)
 {
 }

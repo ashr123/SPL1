@@ -22,5 +22,7 @@ int main(int, char **)
 	FileSystem fileSystem;
 	MkdirCommand mkdirCommand("/first/second/third");
 	mkdirCommand.execute(fileSystem);
+	MkdirCommand mkdirCommand2("/forth");
+	mkdirCommand2.execute(fileSystem);
 	return 0;
 }
