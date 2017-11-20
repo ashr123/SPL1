@@ -98,7 +98,7 @@ LsCommand::LsCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void LsCommand::execute(FileSystem &fs)
+void LsCommand::execute(FileSystem &fs)//TODO
 {
 	vector<BaseFile *> vec=fs.getWorkingDirectory().getChildren();
 	for (auto &i : vec)
@@ -368,7 +368,6 @@ BaseCommand *VerboseCommand::clone() const
 
 ErrorCommand::ErrorCommand(string args) : BaseCommand(move(args))
 {
-
 }
 
 void ErrorCommand::execute(FileSystem &fs)
