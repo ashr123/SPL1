@@ -10,12 +10,41 @@ class FileSystem//TODO Rule of 5
 private:
 	Directory *rootDirectory;
 	Directory *workingDirectory;
-	
-	void copy(const FileSystem &other);
-	void clear();
+
 public:
 	FileSystem();
-	
+
+	/**
+	 * Copy Constructor
+	 * @param other the other FileSystem
+	 */
+	FileSystem(const FileSystem &other);
+
+	/**
+	 * Move Constructor
+	 * @param other the other FileSystem
+	 */
+	FileSystem(FileSystem &&other);
+
+	/**
+	 * Copy Assignment
+	 * @param other the other FileSystem
+	 * @return this reference (after coping)
+	 */
+	FileSystem &operator=(const FileSystem &other);
+
+	/**
+	 * Move Assignment
+	 * @param other the other FileSystem
+	 * @return this reference (after assignmenting)
+	 */
+	FileSystem &operator=(FileSystem &&other);
+
+	/**
+	 * Destructor
+	 */
+	virtual ~FileSystem();
+
 	/**
 	 * @return reference to the root directory
 	 */

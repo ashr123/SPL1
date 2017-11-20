@@ -10,7 +10,7 @@ int main(int, char **)
 //	env.start();
 //	File a("ababa", 3), b("qqqqq", 5),
 //			c(a);
-//	a=b;
+//	a=b
 //	a=File("sss", 7);
 //	Directory *directory=new Directory("first", nullptr);
 //	directory->addFile(new Directory("second", directory));
@@ -18,7 +18,9 @@ int main(int, char **)
 //	cout<<directory->getName()<<endl;
 //	//directory->removeFile(directory->getChildren()[0]);
 //	delete directory;
-	
+
+	FileSystem a(FileSystem()), c, b(c);
+
 	FileSystem fileSystem;
 	MkdirCommand mkdirCommand("/first/second/third");
 	mkdirCommand.execute(fileSystem);

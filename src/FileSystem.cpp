@@ -19,6 +19,48 @@ void FileSystem::setWorkingDirectory(Directory *newWorkingDirectory)
 	workingDirectory=newWorkingDirectory;
 }
 
-FileSystem::FileSystem() : rootDirectory(new Directory("/", nullptr)), workingDirectory(rootDirectory)
+FileSystem::FileSystem() : rootDirectory(new Directory("root", nullptr)), workingDirectory(rootDirectory)
 {
 }
+
+
+FileSystem::FileSystem(const FileSystem &other) : rootDirectory(new Directory(*other.rootDirectory)), workingDirectory(new Directory(*other.workingDirectory))
+{
+}
+
+FileSystem::FileSystem(FileSystem &&other) : rootDirectory(other.rootDirectory), workingDirectory(other.workingDirectory)
+{
+	other.rootDirectory= nullptr;
+	other.workingDirectory= nullptr;
+}
+
+FileSystem &FileSystem::operator=(const FileSystem &other) {
+	if(&other!=this)
+	{
+		delete rootDirectory;
+		rootDirectory=workingDirectory= nullptr;
+		rootDirectory=new Directory(*other.rootDirectory);
+		workingDirectory=new Directory(*other.workingDirectory);
+	}
+	return *this;
+}
+
+FileSystem &FileSystem::operator=(FileSystem &&other)
+{
+	if(&other!=this)
+	{
+		delete rootDirectory;
+		rootDirectory=workingDirectory= nullptr;
+		rootDirectory=new Directory(*other.rootDirectory);
+		workingDirectory=new Directory(*other.workingDirectory);
+		other.workingDirectory= nullptr;
+		other.rootDirectory= nullptr;
+	}
+	return *this;
+}
+
+FileSystem::~FileSystem() {
+
+}
+
+
