@@ -22,7 +22,13 @@ int main(int, char **)
 	FileSystem fileSystem;
 	MkdirCommand mkdirCommand("/first/second/third");
 	mkdirCommand.execute(fileSystem);
-	MkdirCommand mkdirCommand2("/forth");
-	mkdirCommand2.execute(fileSystem);
+	MkfileCommand mkfileCommand("/first/second/third/NewFile 20");
+	mkfileCommand.execute(fileSystem);
+	CdCommand cdCommand("/first/second");
+	cdCommand.execute(fileSystem);
+	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
+	CdCommand cdCommand1("../../first/second/..");
+	cdCommand1.execute(fileSystem);
+	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
 }
