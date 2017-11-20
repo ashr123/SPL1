@@ -6,7 +6,7 @@ LFLAGS=-L/usr/lib
 
 all: First Hello
 Hello: bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o 
-	@echo -e '\e[105m\033[1;96mInvoking: C++ Linker\033[0m'
+	@echo -e '${GREEN}Invoking: C++ Linker${NC}'
 	$(CC) -o bin/Hello bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o $(LFLAGS)
 	@echo -e '\e[105m\033[1;96mFinished building target: Hello\033[0m'
 

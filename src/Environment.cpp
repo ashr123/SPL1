@@ -3,6 +3,7 @@
 //
 
 //#include "../include/FileSystem.h"
+#include <iostream>
 #include "../include/Environment.h"
 
 void Environment::start()
@@ -45,20 +46,29 @@ void Environment::clear()
 
 Environment::Environment() : commandsHistory(), fs()
 {
+
 }
 
-Environment::Environment(const Environment &other) : commandsHistory(), fs(other.fs)//<-coping fs
+Environment::Environment(const Environment &other) : commandsHistory(), fs(other.fs)
 {
-	//clear();
+	if (verbose==1 || verbose==3)
+		cout<<"Environment::Environment(const Environment &other)"<<endl;
+	clear();
 	copy(other);
 }
 
-Environment::Environment(Environment &&other) : commandsHistory(other.commandsHistory), fs(other.fs)
+Environment::Environment(Environment &&other) : commandsHistory(move(other.commandsHistory)), fs(move(other.fs))
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Environment::Environment(Environment &&other)"<<endl;
+	//clear();
+	//copy(other);
 }
 
 Environment &Environment::operator=(const Environment &other)
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Environment &Environment::operator=(const Environment &other)"<<endl;
 	if (this!=&other)
 	{
 		clear();
@@ -71,11 +81,13 @@ Environment &Environment::operator=(const Environment &other)
 
 Environment &Environment::operator=(Environment &&other)
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Environment &Environment::operator=(Environment &&other)"<<endl;
 	if (this!=&other)
 	{
 		clear();
-		commandsHistory=other.commandsHistory;
-		fs=other.fs;
+		copy(other);
+		fs=FileSystem(other.fs);
 	}
 	
 	return *this;
@@ -83,5 +95,7 @@ Environment &Environment::operator=(Environment &&other)
 
 Environment::~Environment()
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Environment::~Environment()"<<endl;
 	clear();
 }

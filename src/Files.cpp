@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <iostream>
 #include "../include/Files.h"
 
 using namespace std;
@@ -24,7 +25,6 @@ void BaseFile::setName(string newName)
 BaseFile::~BaseFile()
 {
 }
-
 
 File::File(string name, int size) : BaseFile(move(name)), size(size)
 {
@@ -70,17 +70,23 @@ void Directory::clear()
 
 Directory::Directory(const Directory &other) : BaseFile(other), children(), parent(other.parent)
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Directory::Directory(const Directory &other)"<<endl;
 	copy(other);
 }
 
-Directory::Directory(Directory &&other) : BaseFile(other), children(other.children), parent(other.parent)
+Directory::Directory(Directory &&other) : BaseFile(move(other.getName())), children(move(other.children)), parent(other.parent)
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Directory::Directory(Directory &&other)"<<endl;
 	//copy(other);
 	other.parent=nullptr;
 }
 
 Directory &Directory::operator=(const Directory &other)
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Directory &Directory::operator=(const Directory &other)"<<endl;
 	if (this!=&other)
 	{
 		clear();
@@ -94,6 +100,8 @@ Directory &Directory::operator=(const Directory &other)
 
 Directory &Directory::operator=(Directory &&other)
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Directory &Directory::operator=(Directory &&other)"<<endl;
 	if (this!=&other)
 	{
 		clear();
@@ -108,6 +116,8 @@ Directory &Directory::operator=(Directory &&other)
 
 Directory::~Directory()
 {
+	if (verbose==1 || verbose==3)
+		cout<<"Directory::~Directory()"<<endl;
 	clear();
 }
 
@@ -180,8 +190,8 @@ int Directory::getSize() const
 string Directory::getAbsolutePath() const
 {
 	if (parent==nullptr)
-		return '/'+getName();
-	return parent->getAbsolutePath()+'/'+getName();
+		return getName();
+	return parent->getAbsolutePath()+(parent->parent!=nullptr ? "/" : "")+getName();
 }
 
 bool Directory::isDir() const

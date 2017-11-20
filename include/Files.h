@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "GlobalVariables.h"
+
 using namespace std;
 
 /**

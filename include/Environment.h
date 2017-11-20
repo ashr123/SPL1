@@ -3,6 +3,7 @@
 
 //#include "Files.h"
 #include "Commands.h"
+#include "GlobalVariables.h"
 
 #include <string>
 #include <vector>

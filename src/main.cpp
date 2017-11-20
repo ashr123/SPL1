@@ -27,7 +27,7 @@ int main(int, char **)
 	CdCommand cdCommand("/first/second");
 	cdCommand.execute(fileSystem);
 	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
-	CdCommand cdCommand1("../../first/second/..");
+	CdCommand cdCommand1("/..");
 	cdCommand1.execute(fileSystem);
 	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
