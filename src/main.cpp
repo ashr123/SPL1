@@ -18,19 +18,20 @@ int main(int, char **)
 //	cout<<directory->getName()<<endl;
 //	//directory->removeFile(directory->getChildren()[0]);
 //	delete directory;
-
-	FileSystem a(FileSystem()), c, b(c);
+//	FileSystem a(FileSystem()), c, b(c);
 
 	FileSystem fileSystem;
 	MkdirCommand mkdirCommand("/first/second/third");
 	mkdirCommand.execute(fileSystem);
 	MkfileCommand mkfileCommand("/first/second/third/NewFile 20");
 	mkfileCommand.execute(fileSystem);
-	CdCommand cdCommand("/first/second");
-	cdCommand.execute(fileSystem);
-	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
-	CdCommand cdCommand1("/..");
-	cdCommand1.execute(fileSystem);
+	RenameCommand renameCommand("/first/second/third/NewFile ???");
+	renameCommand.execute(fileSystem);
+	//CdCommand cdCommand("/first/second");
+	//cdCommand.execute(fileSystem);
+	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
+	//CdCommand cdCommand1("/..");
+	//cdCommand1.execute(fileSystem);
 	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
 }

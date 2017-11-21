@@ -288,9 +288,61 @@ RenameCommand::RenameCommand(string args) : BaseCommand(move(args))
 
 void RenameCommand::execute(FileSystem &fs)
 {
-	string s;
+	vector<string> v;
 	istringstream str(getArgs());
-	
+	string s(getArgs());
+	Directory *curr;
+	if (s[0]=='/')//Absolute path
+	{
+		curr=&fs.getRootDirectory();
+		getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	while (getline(str, s, '/'))
+		v.push_back(s);
+	string oldName = v[v.size()-1].substr(0, v[v.size()-1].find(' '));
+	string newName = v[v.size()-1].substr(v[v.size()-1].find(' '));
+	if (curr->getName()== oldName)
+	{
+		cout<<"“Can’t rename the working directory"<<endl;
+		return;
+	}
+	for(int i=0;i<v.size()-1;i++)
+	{
+		bool find=false;
+		if (v[i]=="..")
+		{
+			if (curr->getParent()==NULL)
+			{
+				cout<<"The system cannot find the path specified"<<endl;
+				return;
+			}
+			curr=curr->getParent();
+			i++;
+		}
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==v[i])
+				if (curr->getChildren()[j]->isDir())
+				{
+					curr=(Directory *)curr->getChildren()[j];
+					find=true;
+				}
+		if (!find)
+		{
+			cout<<"No such file or directory"<<endl;
+			return;
+		}
+	}
+	bool change=false;
+	for (unsigned int j=0; j<curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName()==oldName)
+		{
+			curr->getChildren()[j]->setName(newName);
+			change=true;
+		}
+	if(!change)
+		cout<<"No such file or directory"<<endl;
 }
 
 string RenameCommand::toString() const

@@ -166,7 +166,7 @@ void Directory::sortByName()
 	});
 }
 
-void Directory::sortBySize()
+void Directory::sortBySize()//TODO
 {
 	sort(children.begin(), children.end(), [](BaseFile *&baseFile, BaseFile *&baseFile1) -> bool
 	{

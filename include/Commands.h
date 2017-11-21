@@ -136,7 +136,7 @@ public:
 	virtual BaseCommand * clone() const;
 };
 
-class HistoryCommand : public BaseCommand//TODO Rule of 5
+class HistoryCommand : public BaseCommand
 {
 private:
 	const vector<BaseCommand *> &history;

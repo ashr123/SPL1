@@ -59,8 +59,9 @@ FileSystem &FileSystem::operator=(FileSystem &&other)
 	return *this;
 }
 
-FileSystem::~FileSystem() {
-
+FileSystem::~FileSystem()
+{
+	delete rootDirectory;
 }
 
 

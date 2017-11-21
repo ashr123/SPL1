@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class Environment//TODO Rule of 5
+class Environment
 {
 private:
 	vector<BaseCommand *> commandsHistory;

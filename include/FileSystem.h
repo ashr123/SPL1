@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class FileSystem//TODO Rule of 5
+class FileSystem
 {
 private:
 	Directory *rootDirectory;
