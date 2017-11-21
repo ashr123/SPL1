@@ -27,7 +27,7 @@ int main(int, char **)
 	mkfileCommand.execute(fileSystem);
 	RenameCommand renameCommand("/first/second/third/NewFile ???");
 	renameCommand.execute(fileSystem);
-	RmCommand rmCommand("/first/second");
+	RmCommand rmCommand("/first/second/third");
 	rmCommand.execute(fileSystem);
 	//CdCommand cdCommand("/first/second");
 	//cdCommand.execute(fileSystem);

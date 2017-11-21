@@ -375,10 +375,11 @@ void RmCommand::execute(FileSystem &fs)
 	while (getline(str, s, '/'))
 		v.push_back(s);
 	string toRemove = v[v.size()-1];
-	if(toRemove==curr->getName()|toRemove==fs.getRootDirectory().getName())
+	std::size_t found=fs.getWorkingDirectory().getAbsolutePath().find(toRemove);
+	if(found!=std::string::npos)
 	{
-		cout<<"Can’t remove directory"<<endl;
-		return;;
+		cout << "Can’t remove directory" << endl;
+		return;
 	}
 	for(int i=0;i<v.size()-1;i++)
 	{
@@ -402,17 +403,9 @@ void RmCommand::execute(FileSystem &fs)
 			return;
 		}
 	}
-	bool deleted=false;
-	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
-		if (curr->getChildren()[j]->getName() == toRemove)
-		{
-			deleted=true;
-			if (curr->getChildren()[j]->isDir())
-				removeDirectory((Directory&)curr->getChildren()[j]);///roy check this line pls
-			else
-				delete curr->getChildren()[j];
-		}
-	if(!deleted)
+	int deleted=curr->getChildren().size();
+	curr->removeFile(toRemove);
+	if(curr->getChildren().size()==deleted)
 		cout << "No such file or directory" << endl;
 }
 
@@ -427,16 +420,16 @@ BaseCommand *RmCommand::clone() const
 	return new RmCommand(getArgs());
 }
 
-void RmCommand::removeDirectory(Directory d)
-{
-	for(int i=0;i<d.getChildren().size();i++){
-		if(d.getChildren()[i]->isDir())
-			removeDirectory((Directory&)d.getChildren()[i]);
-		else
-			delete d.getChildren()[i];
-	}
-	delete &d;
-}
+//void RmCommand::removeDirectory(Directory d)
+//{
+//	for(int i=0;i<d.getChildren().size();i++){
+//		if(d.getChildren()[i]->isDir())
+//			removeDirectory((Directory&)d.getChildren()[i]);
+//		else
+//			delete d.getChildren()[i];
+//	}
+//	delete &d;
+//}
 
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) :
 		BaseCommand(move(args)), history(history)
