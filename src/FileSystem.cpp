@@ -63,5 +63,3 @@ FileSystem::~FileSystem()
 {
 	delete rootDirectory;
 }
-
-

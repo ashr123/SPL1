@@ -16,10 +16,9 @@ file.write('CC= g++\n')
 file.write('CFLAGS=-g -Wall -Weffc++ -std=c++11\n')
 file.write('LFLAGS=-L/usr/lib\n\n')
 file.write('all: First '+pName+'\n'+pName+": "+names)
-#file.write('\n\t'+"@echo 'Building target: "+pName+"'\n")
 file.write("\n\t@echo -e '${GREEN}Invoking: C++ Linker${NC}'\n")
 file.write("\t$(CC) -o bin/"+pName+' '+names+"$(LFLAGS)\n")
-file.write("\t@echo -e '\\e[105m\\033[1;96mFinished building target: "+pName+"\\033[0m'\n\n")
+file.write("\t@echo ''\n\t@echo -e '\\e[105m\\033[1;96mFinished building target: "+pName+"\\033[0m'\n\n")
 
 for key in l.keys():
 	file.write('bin/'+l[key]+': src/'+key+'\n')

@@ -134,9 +134,6 @@ public:
 	string toString() const;
 	
 	virtual BaseCommand * clone() const;
-
-private:
-	void removeDirectory(Directory d);
 };
 
 class HistoryCommand : public BaseCommand
@@ -179,7 +176,7 @@ public:
 	virtual BaseCommand * clone() const;
 };
 
-class ExecCommand : public BaseCommand//TODO Rule of 5
+class ExecCommand : public BaseCommand
 {
 private:
 	const vector<BaseCommand *> &history;

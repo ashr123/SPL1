@@ -204,7 +204,7 @@ void MkfileCommand::execute(FileSystem &fs)
 		bool find=false;
 		if (v[i]=="..")
 		{
-			if (curr->getParent()==NULL)
+			if (curr->getParent()==nullptr)
 			{
 				cout<<"The system cannot find the path specified"<<endl;
 				return;
@@ -301,19 +301,19 @@ void RenameCommand::execute(FileSystem &fs)
 		curr=&fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	string oldName = v[v.size()-1].substr(0, v[v.size()-1].find(' '));
-	string newName = v[v.size()-1].substr(v[v.size()-1].find(' '));
-	if (curr->getName()== oldName)
+	string oldName=v[v.size()-1].substr(0, v[v.size()-1].find(' '));
+	string newName=v[v.size()-1].substr(v[v.size()-1].find(' '));
+	if (curr->getName()==oldName)
 	{
 		cout<<"“Can’t rename the working directory"<<endl;
 		return;
 	}
-	for(int i=0;i<v.size()-1;i++)
+	for (unsigned int i=0; i<v.size()-1; i++)
 	{
 		bool find=false;
 		if (v[i]=="..")
 		{
-			if (curr->getParent()==NULL)
+			if (curr->getParent()==nullptr)
 			{
 				cout<<"The system cannot find the path specified"<<endl;
 				return;
@@ -341,7 +341,7 @@ void RenameCommand::execute(FileSystem &fs)
 			curr->getChildren()[j]->setName(newName);
 			change=true;
 		}
-	if(!change)
+	if (!change)
 		cout<<"No such file or directory"<<endl;
 }
 
@@ -374,39 +374,41 @@ void RmCommand::execute(FileSystem &fs)
 		curr=&fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	string toRemove = v[v.size()-1];
-	std::size_t found=fs.getWorkingDirectory().getAbsolutePath().find(toRemove);
-	if(found!=std::string::npos)
+	if (fs.getWorkingDirectory().getAbsolutePath().find(v[v.size()-1])!=string::npos)
 	{
-		cout << "Can’t remove directory" << endl;
+		cout<<"Can’t remove directory"<<endl;
 		return;
 	}
-	for(int i=0;i<v.size()-1;i++)
+	for (unsigned int i=0; i<v.size()-1; i++)
 	{
-		bool find = false;
-		if (v[i] == "..") {
-			if (curr->getParent() == NULL) {
-				cout << "The system cannot find the path specified" << endl;
+		bool find=false;
+		if (v[i]=="..")
+		{
+			if (curr->getParent()==nullptr)
+			{
+				cout<<"The system cannot find the path specified"<<endl;
 				return;
 			}
-			curr = curr->getParent();
+			curr=curr->getParent();
 			i++;
 		}
-		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName() == v[i])
-				if (curr->getChildren()[j]->isDir()) {
-					curr = (Directory *) curr->getChildren()[j];
-					find = true;
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==v[i])
+				if (curr->getChildren()[j]->isDir())
+				{
+					curr=(Directory *)curr->getChildren()[j];
+					find=true;
 				}
-		if (!find) {
-			cout << "No such file or directory" << endl;
+		if (!find)
+		{
+			cout<<"No such file or directory"<<endl;
 			return;
 		}
 	}
-	int deleted=curr->getChildren().size();
-	curr->removeFile(toRemove);
-	if(curr->getChildren().size()==deleted)
-		cout << "No such file or directory" << endl;
+	unsigned long deleted=curr->getChildren().size();
+	curr->removeFile(v[v.size()-1]);
+	if (curr->getChildren().size()==deleted)
+		cout<<"No such file or directory"<<endl;
 }
 
 
@@ -419,17 +421,6 @@ BaseCommand *RmCommand::clone() const
 {
 	return new RmCommand(getArgs());
 }
-
-//void RmCommand::removeDirectory(Directory d)
-//{
-//	for(int i=0;i<d.getChildren().size();i++){
-//		if(d.getChildren()[i]->isDir())
-//			removeDirectory((Directory&)d.getChildren()[i]);
-//		else
-//			delete d.getChildren()[i];
-//	}
-//	delete &d;
-//}
 
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) :
 		BaseCommand(move(args)), history(history)

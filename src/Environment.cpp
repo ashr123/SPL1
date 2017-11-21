@@ -46,7 +46,6 @@ void Environment::clear()
 
 Environment::Environment() : commandsHistory(), fs()
 {
-
 }
 
 Environment::Environment(const Environment &other) : commandsHistory(), fs(other.fs)
