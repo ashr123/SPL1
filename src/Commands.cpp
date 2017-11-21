@@ -69,8 +69,7 @@ void CdCommand::execute(FileSystem &fs)
 				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
 					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
 					{
-						fs.setWorkingDirectory(
-								(Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
+						fs.setWorkingDirectory((Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
 						find=true;
 					}
 			if (!find)
@@ -143,7 +142,7 @@ void MkdirCommand::execute(FileSystem &fs)
 	{
 		if (c[i]=="..")
 		{
-			if (curr->getParent()==NULL)
+			if (curr->getParent()==nullptr)
 			{
 				cout<<"The system cannot find the path specified"<<endl;
 				break;
@@ -250,7 +249,110 @@ CpCommand::CpCommand(string args) : BaseCommand(move(args))
 
 void CpCommand::execute(FileSystem &fs)
 {
-
+	vector<string> firstPath, secPath;
+	istringstream str(getArgs());
+	string firstS, secS, s;
+	Directory *curr;
+	
+	getline(str, firstS, ' ');
+	getline(str, secS, ' ');
+	
+	str=istringstream(firstS);
+	getline(str, s, '/');//for nothing to push
+	while (getline(str, s, '/'))
+		firstPath.push_back(s);
+	
+	str=istringstream(secS);
+	getline(str, s, '/');//for nothing to push
+	while (getline(str, s, '/'))
+		secPath.push_back(s);
+	
+	//Finding source
+	if (firstS[0]=='/')//Absolute path
+	{
+		curr=&fs.getRootDirectory();
+		//getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	
+	for (unsigned int i=0; i<firstPath.size()-1; i++)
+	{
+		bool find=false;
+		if (firstPath[i]=="..")
+		{
+			if (curr->getParent()==nullptr)
+			{
+				cout<<"No such file or directory"<<endl;
+				return;
+			}
+			curr=curr->getParent();
+			i++;
+		}
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
+				{
+					curr=(Directory *)curr->getChildren()[j];
+					find=true;
+					break;
+				}
+		if (!find)
+		{
+			cout<<"No such file or directory"<<endl;
+			return;
+		}
+	}
+	BaseFile *source=nullptr;
+	for (unsigned int j=0; j<curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName()==firstPath[firstPath.size()-1])
+		{
+			source=curr->getChildren()[j];
+			break;
+		}
+	if (!source)
+	{
+		cout<<"No such file or directory"<<endl;
+		return;
+	}
+	
+	//Finding destination
+	if (firstS[0]=='/')//Absolute path
+	{
+		curr=&fs.getRootDirectory();
+		//getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	for (unsigned int i=0; i<secPath.size(); i++)
+	{
+		bool find=false;
+		if (secPath[i]=="..")
+		{
+			if (curr->getParent()==nullptr)
+			{
+				cout<<"No such file or directory"<<endl;
+				return;
+			}
+			curr=curr->getParent();
+			i++;
+		}
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==secPath[i] && curr->getChildren()[j]->isDir())
+			{
+				curr=(Directory *)curr->getChildren()[j];
+				find=true;
+				break;
+			}
+		if (!find)
+		{
+			cout<<"No such file or directory"<<endl;
+			return;
+		}
+	}
+	if (dynamic_cast<Directory *>(source))
+		curr->addFile(new Directory(*(Directory *)source));
+	else
+		curr->addFile(new File(*(File *)source));
 }
 
 string CpCommand::toString() const
@@ -267,7 +369,7 @@ MvCommand::MvCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void MvCommand::execute(FileSystem &fs)
+void MvCommand::execute(FileSystem &fs)//TODO
 {
 
 }
@@ -485,7 +587,8 @@ BaseCommand *ErrorCommand::clone() const
 	return new ErrorCommand(getArgs());
 }
 
-ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)), history(history)
+ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)),
+                                                                              history(history)
 {
 }
 

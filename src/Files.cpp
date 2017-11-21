@@ -65,7 +65,7 @@ void Directory::clear()
 //		delete children[i];
 //		children.erase(children.begin());
 //	}
-	children.erase(children.begin(), children.end());
+	children.clear();
 }
 
 Directory::Directory(const Directory &other) : BaseFile(other), children(), parent(/*other.parent*/nullptr)

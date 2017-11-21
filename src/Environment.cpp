@@ -41,7 +41,8 @@ void Environment::clear()
 //	}
 	for (auto &command : commandsHistory)
 		delete command;
-	commandsHistory.erase(commandsHistory.begin(), commandsHistory.end());
+	//commandsHistory.erase(commandsHistory.begin(), commandsHistory.end());
+	commandsHistory.clear();
 }
 
 Environment::Environment() : commandsHistory(), fs()
@@ -56,7 +57,8 @@ Environment::Environment(const Environment &other) : commandsHistory(), fs(other
 	copy(other);
 }
 
-Environment::Environment(Environment &&other) : commandsHistory(move(other.commandsHistory)), fs(move(other.fs))
+Environment::Environment(Environment &&other) : commandsHistory(move(other.commandsHistory)),
+                                                fs(move(other.fs))
 {
 	if (verbose==1 || verbose==3)
 		cout<<"Environment::Environment(Environment &&other)"<<endl;
