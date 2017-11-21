@@ -361,8 +361,61 @@ RmCommand::RmCommand(string args) : BaseCommand(move(args))
 
 void RmCommand::execute(FileSystem &fs)
 {
-
+	vector<string> v;
+	istringstream str(getArgs());
+	string s(getArgs());
+	Directory *curr;
+	if (s[0]=='/')
+	{
+		curr=&fs.getRootDirectory();
+		getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	while (getline(str, s, '/'))
+		v.push_back(s);
+	string toRemove = v[v.size()-1];
+	if(toRemove==curr->getName()|toRemove==fs.getRootDirectory().getName())
+	{
+		cout<<"Can’t remove directory"<<endl;
+		return;;
+	}
+	for(int i=0;i<v.size()-1;i++)
+	{
+		bool find = false;
+		if (v[i] == "..") {
+			if (curr->getParent() == NULL) {
+				cout << "The system cannot find the path specified" << endl;
+				return;
+			}
+			curr = curr->getParent();
+			i++;
+		}
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == v[i])
+				if (curr->getChildren()[j]->isDir()) {
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
+				}
+		if (!find) {
+			cout << "No such file or directory" << endl;
+			return;
+		}
+	}
+	bool deleted=false;
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName() == toRemove)
+		{
+			deleted=true;
+			if (curr->getChildren()[j]->isDir())
+				removeDirectory((Directory&)curr->getChildren()[j]);///roy check this line pls
+			else
+				delete curr->getChildren()[j];
+		}
+	if(!deleted)
+		cout << "No such file or directory" << endl;
 }
+
 
 string RmCommand::toString() const
 {
@@ -372,6 +425,17 @@ string RmCommand::toString() const
 BaseCommand *RmCommand::clone() const
 {
 	return new RmCommand(getArgs());
+}
+
+void RmCommand::removeDirectory(Directory d)
+{
+	for(int i=0;i<d.getChildren().size();i++){
+		if(d.getChildren()[i]->isDir())
+			removeDirectory((Directory&)d.getChildren()[i]);
+		else
+			delete d.getChildren()[i];
+	}
+	delete &d;
 }
 
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history) :

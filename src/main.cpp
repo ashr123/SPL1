@@ -27,6 +27,8 @@ int main(int, char **)
 	mkfileCommand.execute(fileSystem);
 	RenameCommand renameCommand("/first/second/third/NewFile ???");
 	renameCommand.execute(fileSystem);
+	RmCommand rmCommand("/first/second");
+	rmCommand.execute(fileSystem);
 	//CdCommand cdCommand("/first/second");
 	//cdCommand.execute(fileSystem);
 	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;

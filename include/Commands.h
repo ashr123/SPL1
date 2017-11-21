@@ -134,6 +134,9 @@ public:
 	string toString() const;
 	
 	virtual BaseCommand * clone() const;
+
+private:
+	void removeDirectory(Directory d);
 };
 
 class HistoryCommand : public BaseCommand
