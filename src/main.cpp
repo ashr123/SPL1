@@ -34,8 +34,8 @@ int main(int, char **)
 	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	//CdCommand cdCommand1("/..");
 	//cdCommand1.execute(fileSystem);
-	CpCommand cpCommand("/first/second /");
-	cpCommand.execute(fileSystem);
+	MvCommand mvCommand("/first/second/third/NewFile /first");
+	mvCommand.execute(fileSystem);
 	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
 }

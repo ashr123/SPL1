@@ -371,7 +371,32 @@ MvCommand::MvCommand(string args) : BaseCommand(move(args))
 
 void MvCommand::execute(FileSystem &fs)//TODO
 {
+	vector<string> firstPath, secPath;
+	istringstream str(getArgs());
+	string firstS, secS, s;
+	Directory *curr;
 
+	getline(str, firstS, ' ');
+	getline(str, secS, ' ');
+
+	str=istringstream(firstS);
+	getline(str, s, '/');//for nothing to push
+	while (getline(str, s, '/'))
+		firstPath.push_back(s);
+
+	str=istringstream(secS);
+	getline(str, s, '/');//for nothing to push
+	while (getline(str, s, '/'))
+		secPath.push_back(s);
+	if (fs.getWorkingDirectory().getAbsolutePath().find(secPath[secPath.size()-1])!=string::npos)
+	{
+		cout<<"Can’t move directory"<<endl;
+		return;
+	}
+	CpCommand cpCommand(firstS+' '+secS);
+	cpCommand.execute(fs);
+	RmCommand rmCommand(firstS);
+	rmCommand.execute(fs);
 }
 
 string MvCommand::toString() const
