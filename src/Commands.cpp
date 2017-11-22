@@ -22,7 +22,7 @@ PwdCommand::PwdCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void PwdCommand::execute(FileSystem &fs)
+void PwdCommand::execute(FileSystem &fs) const
 {
 	cout<<fs.getWorkingDirectory().getAbsolutePath()<<endl;
 }
@@ -42,7 +42,7 @@ CdCommand::CdCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void CdCommand::execute(FileSystem &fs)
+void CdCommand::execute(FileSystem &fs) const
 {
 	istringstream str(getArgs());
 	string s(getArgs());
@@ -97,14 +97,14 @@ LsCommand::LsCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void LsCommand::execute(FileSystem &fs)//TODO
+void LsCommand::execute(FileSystem &fs) const//TODO
 {
 	vector<BaseFile *> vec=fs.getWorkingDirectory().getChildren();
 	for (auto &i : vec)
 	{
 		if (i->isDir())
-			cout<<"DIR"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
-		cout<<"FILE"<<"\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
+			cout<<"DIR\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
+		cout<<"FILE\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
 	}
 }
 
@@ -122,7 +122,7 @@ MkdirCommand::MkdirCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void MkdirCommand::execute(FileSystem &fs)
+void MkdirCommand::execute(FileSystem &fs) const
 {
 	vector<string> c;
 	istringstream str(getArgs());
@@ -181,7 +181,7 @@ MkfileCommand::MkfileCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void MkfileCommand::execute(FileSystem &fs)
+void MkfileCommand::execute(FileSystem &fs) const
 {
 	vector<string> v;
 	istringstream str(getArgs());
@@ -247,7 +247,7 @@ CpCommand::CpCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void CpCommand::execute(FileSystem &fs)
+void CpCommand::execute(FileSystem &fs) const
 {
 	vector<string> firstPath, secPath;
 	istringstream str(getArgs());
@@ -369,12 +369,11 @@ MvCommand::MvCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void MvCommand::execute(FileSystem &fs)//TODO
+void MvCommand::execute(FileSystem &fs) const
 {
 	vector<string> firstPath, secPath;
 	istringstream str(getArgs());
 	string firstS, secS, s;
-	Directory *curr;
 
 	getline(str, firstS, ' ');
 	getline(str, secS, ' ');
@@ -393,10 +392,12 @@ void MvCommand::execute(FileSystem &fs)//TODO
 		cout<<"Can’t move directory"<<endl;
 		return;
 	}
-	CpCommand cpCommand(firstS+' '+secS);
-	cpCommand.execute(fs);
-	RmCommand rmCommand(firstS);
-	rmCommand.execute(fs);
+//	CpCommand cpCommand(firstS+' '+secS);
+//	cpCommand.execute(fs);
+	CpCommand(getArgs()).execute(fs);
+//	RmCommand rmCommand(firstS);
+//	rmCommand.execute(fs);
+	RmCommand(firstS).execute(fs);
 }
 
 string MvCommand::toString() const
@@ -413,7 +414,7 @@ RenameCommand::RenameCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void RenameCommand::execute(FileSystem &fs)
+void RenameCommand::execute(FileSystem &fs) const
 {
 	vector<string> v;
 	istringstream str(getArgs());
@@ -486,7 +487,7 @@ RmCommand::RmCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void RmCommand::execute(FileSystem &fs)
+void RmCommand::execute(FileSystem &fs) const
 {
 	vector<string> v;
 	istringstream str(getArgs());
@@ -554,7 +555,7 @@ HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history
 {
 }
 
-void HistoryCommand::execute(FileSystem &fs)
+void HistoryCommand::execute(FileSystem &fs) const
 {
 	for (unsigned int i=0; i<history.size(); i++)
 		cout<<i<<'\t'<<history[i]->toString()<<endl;
@@ -574,7 +575,7 @@ VerboseCommand::VerboseCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void VerboseCommand::execute(FileSystem &fs)
+void VerboseCommand::execute(FileSystem &fs) const
 {
 	int temp=stoi(getArgs(), nullptr, 10);
 	if (temp<0 || temp>3)
@@ -597,7 +598,7 @@ ErrorCommand::ErrorCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void ErrorCommand::execute(FileSystem &fs)
+void ErrorCommand::execute(FileSystem &fs) const
 {
 	cout<<getArgs()<<": Unknown command"<<endl;
 }
@@ -617,7 +618,7 @@ ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : Ba
 {
 }
 
-void ExecCommand::execute(FileSystem &fs)
+void ExecCommand::execute(FileSystem &fs) const
 {
 	int temp=stoi(getArgs(), nullptr, 10);
 	if (temp<0 || temp>=(int)history.size())

@@ -34,10 +34,20 @@ public:
 	 */
 	void setName(string newName);
 	
+	/**
+	 * Calculates the size of this BaseFile according to this dynamic type
+	 * @return the size of this file or directory
+	 */
 	virtual int getSize() const =0;
 	
+	/**
+	 * @return true if this BaseFile is directory, false otherwise
+	 */
 	virtual bool isDir() const =0;
 	
+	/**
+	 * Destructor
+	 */
 	virtual ~BaseFile();
 };
 
@@ -57,9 +67,6 @@ public:
 	 */
 	File(string name, int size);
 	
-	/**
-	 * @return the size of the file
-	 */
 	int getSize() const;
 	
 	virtual bool isDir() const;
@@ -116,9 +123,6 @@ public:
 	 */
 	Directory &operator=(Directory &&other);
 	
-	/**
-	 * Destructor
-	 */
 	virtual ~Directory();
 	
 	/**
@@ -165,9 +169,6 @@ public:
 	 */
 	vector<BaseFile *> getChildren() const;
 	
-	/**
-	 * @return the size of the directory (recursively)
-	 */
 	int getSize() const;
 	
 	/**

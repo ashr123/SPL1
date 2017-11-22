@@ -2,7 +2,7 @@
 #include "../include/Environment.h"
 // ... You may not change this file
 
-unsigned int verbose=0;
+unsigned int verbose=1;
 
 int main(int, char **)
 {
