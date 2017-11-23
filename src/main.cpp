@@ -6,8 +6,8 @@ unsigned int verbose=1;
 
 int main(int, char **)
 {
-//	Environment env;
-//	env.start();
+	Environment env;
+	env.start();
 //	File a("ababa", 3), b("qqqqq", 5),
 //			c(a);
 //	a=b

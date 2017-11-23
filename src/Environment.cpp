@@ -3,11 +3,97 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include "../include/Environment.h"
 
 void Environment::start()
 {
-
+	string args, firstS, secS, thirdS;
+	while (true)
+	{
+		cout<<fs.getWorkingDirectory().getAbsolutePath()+'>';
+		cin>>args;
+		istringstream str(args);
+		if (args=="exit")
+			return;
+		
+		getline(str, firstS, ' ');
+		getline(str, secS, ' ');
+		getline(str, thirdS, ' ');
+		
+		if (firstS=="pwd")
+		{
+			commandsHistory.push_back(new PwdCommand(""));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="cd")
+		{
+			commandsHistory.push_back(new CdCommand(secS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="ls")
+		{
+			commandsHistory.push_back(new LsCommand(secS+' '+thirdS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="mkdir")
+		{
+			commandsHistory.push_back(new MkdirCommand(secS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="mkfile")
+		{
+			commandsHistory.push_back(new MkfileCommand(secS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="cp")
+		{
+			commandsHistory.push_back(new CpCommand(secS+' '+thirdS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="mv")
+		{
+			commandsHistory.push_back(new MvCommand(secS+' '+thirdS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="rename")
+		{
+			commandsHistory.push_back(new RenameCommand(secS+' '+thirdS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="rm")
+		{
+			commandsHistory.push_back(new CpCommand(secS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="history")
+		{
+			commandsHistory.push_back(new HistoryCommand("", commandsHistory));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="verbose")
+		{
+			commandsHistory.push_back(new VerboseCommand(""));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+		if (firstS=="exec")
+		{
+			commandsHistory.push_back(new ExecCommand("", commandsHistory));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			continue;
+		}
+	}
 }
 
 FileSystem &Environment::getFileSystem()
