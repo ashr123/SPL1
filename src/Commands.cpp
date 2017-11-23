@@ -106,9 +106,9 @@ void LsCommand::execute(FileSystem &fs) const
 	if (s[0]=='-')
 	{
 		getline(str, order, ' ');
-		s=s.substr(3);
+		s=s.size()<3 ? "" : s.substr(3);
 	}
-	if (s.size()>0 && s[0]=='/')//Absolute path
+	if (!s.empty() && s[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
 		getline(str, s, '/');
@@ -116,8 +116,7 @@ void LsCommand::execute(FileSystem &fs) const
 	else
 		curr=&fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
-		if (s!=" ")
-			v.push_back(s);
+		v.push_back(s);
 	for (unsigned int i=0; i<v.size(); i++)
 	{
 		bool find=false;
@@ -307,12 +306,12 @@ void CpCommand::execute(FileSystem &fs) const
 	getline(str, secS, ' ');
 	
 	str=istringstream(firstS);
-	getline(str, s, '/');//for nothing to push
+	//getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		firstPath.push_back(s);
 	
 	str=istringstream(secS);
-	getline(str, s, '/');//for nothing to push
+	//getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		secPath.push_back(s);
 	
@@ -430,12 +429,12 @@ void MvCommand::execute(FileSystem &fs) const
 	getline(str, secS, ' ');
 	
 	str=istringstream(firstS);
-	getline(str, s, '/');//for nothing to push
+	//getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		firstPath.push_back(s);
 	
 	str=istringstream(secS);
-	getline(str, s, '/');//for nothing to push
+	//getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		secPath.push_back(s);
 	

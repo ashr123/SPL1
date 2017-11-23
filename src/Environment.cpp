@@ -37,7 +37,7 @@ void Environment::start()
 		}
 		if (firstS=="ls")
 		{
-			commandsHistory.push_back(new LsCommand(secS+' '+thirdS));
+			commandsHistory.push_back(new LsCommand(secS+(thirdS=="" ? "" : ' '+thirdS)));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
@@ -50,25 +50,25 @@ void Environment::start()
 		}
 		if (firstS=="mkfile")
 		{
-			commandsHistory.push_back(new MkfileCommand(secS+' '+thirdS));
+			commandsHistory.push_back(new MkfileCommand(secS+(thirdS=="" ? "" : ' '+thirdS)));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
 		if (firstS=="cp")
 		{
-			commandsHistory.push_back(new CpCommand(secS+' '+thirdS));
+			commandsHistory.push_back(new CpCommand(secS+(thirdS=="" ? "" : ' '+thirdS)));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
 		if (firstS=="mv")
 		{
-			commandsHistory.push_back(new MvCommand(secS+' '+thirdS));
+			commandsHistory.push_back(new MvCommand(secS+(thirdS=="" ? "" : ' '+thirdS)));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
 		if (firstS=="rename")
 		{
-			commandsHistory.push_back(new RenameCommand(secS+' '+thirdS));
+			commandsHistory.push_back(new RenameCommand(secS+(thirdS=="" ? "" : ' '+thirdS)));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
