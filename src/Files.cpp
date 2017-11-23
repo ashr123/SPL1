@@ -146,6 +146,8 @@ void Directory::setParent(Directory *newParent)
 
 void Directory::addFile(BaseFile *file)
 {
+	if (dynamic_cast<Directory *>(file))
+		((Directory *)file)->setParent(this);
 	children.push_back(file);
 }
 
@@ -212,4 +214,9 @@ string Directory::getAbsolutePath() const
 bool Directory::isDir() const
 {
 	return true;
+}
+
+void Directory::dropChildAt(unsigned int index)
+{
+	children.erase(children.begin()+index);
 }

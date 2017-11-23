@@ -271,7 +271,7 @@ void CpCommand::execute(FileSystem &fs) const
 	if (firstS[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
-		//getline(str, s, '/');
+		getline(str, s, '/');
 	}
 	else
 		curr=&fs.getWorkingDirectory();
@@ -374,6 +374,8 @@ void MvCommand::execute(FileSystem &fs) const
 	vector<string> firstPath, secPath;
 	istringstream str(getArgs());
 	string firstS, secS, s;
+	Directory *curr=nullptr, *sourceParent=nullptr;
+	unsigned int sourceLocationAtfirstS=0;
 
 	getline(str, firstS, ' ');
 	getline(str, secS, ' ');
@@ -387,17 +389,97 @@ void MvCommand::execute(FileSystem &fs) const
 	getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		secPath.push_back(s);
+	
 	if (fs.getWorkingDirectory().getAbsolutePath().find(secPath[secPath.size()-1])!=string::npos)
 	{
 		cout<<"Can’t move directory"<<endl;
 		return;
 	}
-//	CpCommand cpCommand(firstS+' '+secS);
-//	cpCommand.execute(fs);
-	CpCommand(getArgs()).execute(fs);
-//	RmCommand rmCommand(firstS);
-//	rmCommand.execute(fs);
-	RmCommand(firstS).execute(fs);
+	
+	if (firstS[0]=='/')//Absolute path
+	{
+		curr=&fs.getRootDirectory();
+		//getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	for (unsigned int i=0; i<firstPath.size()-1; i++)
+	{
+		bool find=false;
+		if (firstPath[i]=="..")
+		{
+			if (curr->getParent()==nullptr)
+			{
+				cout<<"No such file or directory"<<endl;
+				return;
+			}
+			curr=curr->getParent();
+			i++;
+		}
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
+			{
+				curr=(Directory *)curr->getChildren()[j];
+				find=true;
+				break;
+			}
+		if (!find)
+		{
+			cout<<"No such file or directory"<<endl;
+			return;
+		}
+	}
+	BaseFile *source=nullptr;
+	for (unsigned int j=0; j<curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName()==firstPath[firstPath.size()-1])
+		{
+			source=curr->getChildren()[j];
+			sourceParent=curr;
+			sourceLocationAtfirstS=j;
+			break;
+		}
+	if (!source)
+	{
+		cout<<"No such file or directory"<<endl;
+		return;
+	}
+	
+	//Finding destination
+	if (firstS[0]=='/')//Absolute path
+	{
+		curr=&fs.getRootDirectory();
+		//getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	for (unsigned int i=0; i<secPath.size(); i++)
+	{
+		bool find=false;
+		if (secPath[i]=="..")
+		{
+			if (curr->getParent()==nullptr)
+			{
+				cout<<"No such file or directory"<<endl;
+				return;
+			}
+			curr=curr->getParent();
+			i++;
+		}
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==secPath[i] && curr->getChildren()[j]->isDir())
+			{
+				curr=(Directory *)curr->getChildren()[j];
+				find=true;
+				curr->addFile(source);
+				sourceParent->dropChildAt(sourceLocationAtfirstS);
+				break;
+			}
+		if (!find)
+		{
+			cout<<"No such file or directory"<<endl;
+			return;
+		}
+	}
 }
 
 string MvCommand::toString() const

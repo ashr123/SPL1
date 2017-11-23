@@ -177,6 +177,8 @@ public:
 	string getAbsolutePath() const;
 	
 	virtual bool isDir() const;
+	
+	void dropChildAt(unsigned int index);
 };
 
 #endif

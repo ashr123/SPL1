@@ -21,10 +21,8 @@ int main(int, char **)
 //	FileSystem a(FileSystem()), c, b(c);
 
 	FileSystem fileSystem;
-	MkdirCommand mkdirCommand("/first/second/third");
-	mkdirCommand.execute(fileSystem);
-	MkfileCommand mkfileCommand("/first/second/third/NewFile 20");
-	mkfileCommand.execute(fileSystem);
+	MkdirCommand("/first/second/third").execute(fileSystem);
+	MkfileCommand("/first/second/third/NewFile 20").execute(fileSystem);
 //	RenameCommand renameCommand("/first/second/third/NewFile ???");
 //	renameCommand.execute(fileSystem);
 //	RmCommand rmCommand("/first/second/third");
@@ -34,8 +32,7 @@ int main(int, char **)
 	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	//CdCommand cdCommand1("/..");
 	//cdCommand1.execute(fileSystem);
-	MvCommand mvCommand("/first/second/third/NewFile /first");
-	mvCommand.execute(fileSystem);
+	MvCommand("/first/second/third/NewFile /first").execute(fileSystem);
 	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
 }
