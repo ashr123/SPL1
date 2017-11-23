@@ -97,14 +97,56 @@ LsCommand::LsCommand(string args) : BaseCommand(move(args))
 {
 }
 
-void LsCommand::execute(FileSystem &fs) const//TODO
+void LsCommand::execute(FileSystem &fs) const
 {
-	vector<BaseFile *> vec=fs.getWorkingDirectory().getChildren();
-	for (auto &i : vec)
+	vector<string> v;
+	istringstream str(getArgs());
+	string s(getArgs()),order= nullptr;
+	Directory *curr;
+	if(s[0]=='-')
 	{
-		if (i->isDir())
-			cout<<"DIR\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
-		cout<<"FILE\t"<<i->getName()<<"\t"<<i->getSize()<<endl;
+		getline(str,order, ' ');
+		s=s.substr(3);
+	}
+	if (s.size()>0 && s[0]=='/')//Absolute path
+	{
+		curr=&fs.getRootDirectory();
+		getline(str, s, '/');
+	}
+	else
+		curr=&fs.getWorkingDirectory();
+	while (getline(str, s, '/'))
+		v.push_back(s);
+	for (unsigned int i=0; i<v.size()-1; i++)
+	{
+		bool find = false;
+		if (v[i] == "..") {
+			if (curr->getParent() == nullptr) {
+				cout << "The system cannot find the path specified" << endl;
+				return;
+			}
+			curr = curr->getParent();
+			i++;
+		}
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == v[i])
+				if (curr->getChildren()[j]->isDir()) {
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
+				}
+		if (!find) {
+			cout << "The system cannot find the path specified" << endl;
+			return;
+		}
+	}
+	if(order!= nullptr)
+		((Directory*)curr)->sortBySize();
+	else ((Directory*)curr)->sortBySize();
+	for (unsigned int j=0; j<curr->getChildren().size(); j++)
+	{
+		if (curr->getChildren()[j]->isDir())
+			cout << "DIR\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
+		cout << "FILE\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
 	}
 }
 
