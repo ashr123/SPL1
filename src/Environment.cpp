@@ -8,15 +8,17 @@
 
 void Environment::start()
 {
-	string args, firstS, secS, thirdS;
+	string args, firstS, secS, thirdS, garbage;
 	while (true)
 	{
 		cout<<fs.getWorkingDirectory().getAbsolutePath()+'>';
-		cin>>args;
+		getline(cin, args);
+		if (verbose==2 || verbose==3)
+			cout<<args<<endl;
 		istringstream str(args);
 		if (args=="exit")
 			return;
-		
+		firstS=secS=thirdS="";
 		getline(str, firstS, ' ');
 		getline(str, secS, ' ');
 		getline(str, thirdS, ' ');
@@ -43,11 +45,12 @@ void Environment::start()
 		{
 			commandsHistory.push_back(new MkdirCommand(secS));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			getline(str, garbage);
 			continue;
 		}
 		if (firstS=="mkfile")
 		{
-			commandsHistory.push_back(new MkfileCommand(secS));
+			commandsHistory.push_back(new MkfileCommand(secS+' '+thirdS));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
@@ -83,7 +86,7 @@ void Environment::start()
 		}
 		if (firstS=="verbose")
 		{
-			commandsHistory.push_back(new VerboseCommand(""));
+			commandsHistory.push_back(new VerboseCommand(secS));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
@@ -92,6 +95,11 @@ void Environment::start()
 			commandsHistory.push_back(new ExecCommand("", commandsHistory));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
+		}
+		else
+		{
+			commandsHistory.push_back(new ErrorCommand(firstS));
+			commandsHistory[commandsHistory.size()-1]->execute(fs);
 		}
 	}
 }

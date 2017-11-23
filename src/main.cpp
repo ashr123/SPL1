@@ -20,20 +20,20 @@ int main(int, char **)
 //	delete directory;
 //	FileSystem a(FileSystem()), c, b(c);
 
-	FileSystem fileSystem;
-	MkdirCommand("/first/second/third").execute(fileSystem);
-	MkfileCommand("/first/second/third/NewFile 20").execute(fileSystem);
-	MkfileCommand("/first/second/NewFile2 200").execute(fileSystem);
-	LsCommand("/first/second").execute(fileSystem);
-	CdCommand("/first/second/third").execute(fileSystem);
-//	RenameCommand renameCommand("/first/second/third/NewFile ???");
-//	renameCommand.execute(fileSystem);
-	RmCommand("/first/second").execute(fileSystem);
-	//CdCommand cdCommand("/first/second");
-	//cdCommand.execute(fileSystem);
-	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
-	//CdCommand cdCommand1("/..");
-	//cdCommand1.execute(fileSystem);
-	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
+//	FileSystem fileSystem;
+//	MkdirCommand("/first/second/third").execute(fileSystem);
+//	MkfileCommand("/first/second/third/NewFile 20").execute(fileSystem);
+//	MkfileCommand("/first/second/NewFile2 200").execute(fileSystem);
+//	LsCommand("/first/second").execute(fileSystem);
+//	CdCommand("/first/second/third").execute(fileSystem);
+////	RenameCommand renameCommand("/first/second/third/NewFile ???");
+////	renameCommand.execute(fileSystem);
+//	RmCommand("/first/second").execute(fileSystem);
+//	//CdCommand cdCommand("/first/second");
+//	//cdCommand.execute(fileSystem);
+//	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
+//	//CdCommand cdCommand1("/..");
+//	//cdCommand1.execute(fileSystem);
+//	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
 }

@@ -177,7 +177,7 @@ void Directory::sortByName()
 {
 	sort(children.begin(), children.end(), [](BaseFile *&baseFile, BaseFile *&baseFile1) -> bool
 	{
-		return baseFile->getName()>baseFile1->getName();
+		return baseFile->getName()<baseFile1->getName();
 	});
 }
 
@@ -186,8 +186,8 @@ void Directory::sortBySize()
 	sort(children.begin(), children.end(), [](BaseFile *&baseFile, BaseFile *&baseFile1) -> bool
 	{
 		if (baseFile->getSize()==baseFile1->getSize())
-			return baseFile->getName()>baseFile1->getName();
-		return baseFile->getSize()>baseFile1->getSize();
+			return baseFile->getName()<baseFile1->getName();
+		return baseFile->getSize()<baseFile1->getSize();
 	});
 }
 

@@ -101,11 +101,11 @@ void LsCommand::execute(FileSystem &fs) const
 {
 	vector<string> v;
 	istringstream str(getArgs());
-	string s(getArgs()),order;
+	string s(getArgs()), order;
 	Directory *curr;
-	if(s[0]=='-')
+	if (s[0]=='-')
 	{
-		getline(str,order, ' ');
+		getline(str, order, ' ');
 		s=s.substr(3);
 	}
 	if (s.size()>0 && s[0]=='/')//Absolute path
@@ -116,38 +116,44 @@ void LsCommand::execute(FileSystem &fs) const
 	else
 		curr=&fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
-		v.push_back(s);
+		if (s!=" ")
+			v.push_back(s);
 	for (unsigned int i=0; i<v.size(); i++)
 	{
-		bool find = false;
-		if (v[i] == "..") {
-			if (curr->getParent() == nullptr) {
-				cout << "The system cannot find the path specified" << endl;
+		bool find=false;
+		if (v[i]=="..")
+		{
+			if (curr->getParent()==nullptr)
+			{
+				cout<<"The system cannot find the path specified"<<endl;
 				return;
 			}
-			curr = curr->getParent();
+			curr=curr->getParent();
 			i++;
 		}
-		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName() == v[i])
-				if (curr->getChildren()[j]->isDir()) {
-					curr = (Directory *) curr->getChildren()[j];
-					find = true;
+		for (unsigned int j=0; j<curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName()==v[i])
+				if (curr->getChildren()[j]->isDir())
+				{
+					curr=(Directory *)curr->getChildren()[j];
+					find=true;
 				}
-		if (!find) {
-			cout << "The system cannot find the path specified" << endl;
+		if (!find)
+		{
+			cout<<"The system cannot find the path specified"<<endl;
 			return;
 		}
 	}
-	if(order=="-s")
-		((Directory*)curr)->sortBySize();
-	else ((Directory*)curr)->sortByName();
+	if (order=="-s")
+		((Directory *)curr)->sortBySize();
+	else
+		((Directory *)curr)->sortByName();
 	for (unsigned int j=0; j<curr->getChildren().size(); j++)
 	{
 		if (curr->getChildren()[j]->isDir())
-			cout << "DIR\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
+			cout<<"DIR\t"<<curr->getChildren()[j]->getName()<<"\t"<<curr->getChildren()[j]->getSize()<<endl;
 		else
-			cout << "FILE\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
+			cout<<"FILE\t"<<curr->getChildren()[j]->getName()<<"\t"<<curr->getChildren()[j]->getSize()<<endl;
 	}
 }
 
@@ -334,11 +340,11 @@ void CpCommand::execute(FileSystem &fs) const
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
-				{
-					curr=(Directory *)curr->getChildren()[j];
-					find=true;
-					break;
-				}
+			{
+				curr=(Directory *)curr->getChildren()[j];
+				find=true;
+				break;
+			}
 		if (!find)
 		{
 			cout<<"No such file or directory"<<endl;
@@ -359,7 +365,7 @@ void CpCommand::execute(FileSystem &fs) const
 	}
 	
 	//Finding destination
-	if (firstS[0]=='/')//Absolute path
+	if (secS[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
 		getline(str, s, '/');
@@ -419,25 +425,19 @@ void MvCommand::execute(FileSystem &fs) const
 	string firstS, secS, s;
 	Directory *curr=nullptr, *sourceParent=nullptr;
 	unsigned int sourceLocationAtfirstS=0;
-
+	
 	getline(str, firstS, ' ');
 	getline(str, secS, ' ');
-
+	
 	str=istringstream(firstS);
 	getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		firstPath.push_back(s);
-
+	
 	str=istringstream(secS);
 	getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		secPath.push_back(s);
-	
-	if (fs.getWorkingDirectory().getAbsolutePath().find(secPath[secPath.size()-1])!=string::npos)
-	{
-		cout<<"Can’t move directory"<<endl;
-		return;
-	}
 	
 	if (firstS[0]=='/')//Absolute path
 	{
@@ -446,6 +446,13 @@ void MvCommand::execute(FileSystem &fs) const
 	}
 	else
 		curr=&fs.getWorkingDirectory();
+	
+	if (fs.getWorkingDirectory().getAbsolutePath().find(secPath[secPath.size()-1])!=string::npos)
+	{
+		cout<<"Can’t move directory"<<endl;
+		return;
+	}
+	
 	for (unsigned int i=0; i<firstPath.size()-1; i++)
 	{
 		bool find=false;
@@ -488,7 +495,7 @@ void MvCommand::execute(FileSystem &fs) const
 	}
 	
 	//Finding destination
-	if (firstS[0]=='/')//Absolute path
+	if (secS[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
 		getline(str, s, '/');
