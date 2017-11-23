@@ -178,6 +178,10 @@ public:
 	
 	virtual bool isDir() const;
 	
+	/**
+	 * Drops a child from children at specific index
+	 * @param index the index of the wanted chiled to be droped
+	 */
 	void dropChildAt(unsigned int index);
 };
 

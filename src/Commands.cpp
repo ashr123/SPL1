@@ -319,7 +319,7 @@ void CpCommand::execute(FileSystem &fs) const
 	if (firstS[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
-		//getline(str, s, '/');
+		getline(str, s, '/');
 	}
 	else
 		curr=&fs.getWorkingDirectory();
@@ -399,7 +399,7 @@ void MvCommand::execute(FileSystem &fs) const
 	if (firstS[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
-		//getline(str, s, '/');
+		getline(str, s, '/');
 	}
 	else
 		curr=&fs.getWorkingDirectory();
@@ -448,7 +448,7 @@ void MvCommand::execute(FileSystem &fs) const
 	if (firstS[0]=='/')//Absolute path
 	{
 		curr=&fs.getRootDirectory();
-		//getline(str, s, '/');
+		getline(str, s, '/');
 	}
 	else
 		curr=&fs.getWorkingDirectory();

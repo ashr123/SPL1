@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "../include/FileSystem.h"
+#include "../include/Commands.h"
 
 Directory &FileSystem::getRootDirectory() const
 {
@@ -25,10 +26,11 @@ FileSystem::FileSystem() : rootDirectory(new Directory("/", nullptr)), workingDi
 }
 
 FileSystem::FileSystem(const FileSystem &other) : rootDirectory(new Directory(*other.rootDirectory)),
-                                                  workingDirectory(new Directory(*other.workingDirectory))//TODO
+                                                  workingDirectory(rootDirectory)
 {
 	if (verbose==1 || verbose==3)
 		cout<<"FileSystem::FileSystem(const FileSystem &other)"<<endl;
+	CdCommand(other.workingDirectory->getAbsolutePath()).execute(*this);
 }
 
 FileSystem::FileSystem(FileSystem &&other) : rootDirectory(other.rootDirectory),
@@ -40,7 +42,7 @@ FileSystem::FileSystem(FileSystem &&other) : rootDirectory(other.rootDirectory),
 	other.workingDirectory=nullptr;
 }
 
-FileSystem &FileSystem::operator=(const FileSystem &other)//TODO
+FileSystem &FileSystem::operator=(const FileSystem &other)
 {
 	if (verbose==1 || verbose==3)
 		cout<<"FileSystem &FileSystem::operator=(const FileSystem &other)"<<endl;
@@ -49,7 +51,8 @@ FileSystem &FileSystem::operator=(const FileSystem &other)//TODO
 		delete rootDirectory;
 		rootDirectory=workingDirectory=nullptr;
 		rootDirectory=new Directory(*other.rootDirectory);
-		workingDirectory=new Directory(*other.workingDirectory);
+		workingDirectory=rootDirectory;
+		CdCommand(other.workingDirectory->getAbsolutePath()).execute(*this);
 	}
 	return *this;
 }
