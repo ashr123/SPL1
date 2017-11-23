@@ -101,7 +101,7 @@ void LsCommand::execute(FileSystem &fs) const
 {
 	vector<string> v;
 	istringstream str(getArgs());
-	string s(getArgs()),order= nullptr;
+	string s(getArgs()),order;
 	Directory *curr;
 	if(s[0]=='-')
 	{
@@ -117,7 +117,7 @@ void LsCommand::execute(FileSystem &fs) const
 		curr=&fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	for (unsigned int i=0; i<v.size()-1; i++)
+	for (unsigned int i=0; i<v.size(); i++)
 	{
 		bool find = false;
 		if (v[i] == "..") {
@@ -139,14 +139,15 @@ void LsCommand::execute(FileSystem &fs) const
 			return;
 		}
 	}
-	if(order!= nullptr)
+	if(order=="-s")
 		((Directory*)curr)->sortBySize();
-	else ((Directory*)curr)->sortBySize();
+	else ((Directory*)curr)->sortByName();
 	for (unsigned int j=0; j<curr->getChildren().size(); j++)
 	{
 		if (curr->getChildren()[j]->isDir())
 			cout << "DIR\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
-		cout << "FILE\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
+		else
+			cout << "FILE\t" << curr->getChildren()[j]->getName() << "\t" << curr->getChildren()[j]->getSize() << endl;
 	}
 }
 

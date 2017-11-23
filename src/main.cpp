@@ -23,16 +23,17 @@ int main(int, char **)
 	FileSystem fileSystem;
 	MkdirCommand("/first/second/third").execute(fileSystem);
 	MkfileCommand("/first/second/third/NewFile 20").execute(fileSystem);
+	MkfileCommand("/first/second/NewFile2 200").execute(fileSystem);
+	LsCommand("/first/second").execute(fileSystem);
+	CdCommand("/first/second/third").execute(fileSystem);
 //	RenameCommand renameCommand("/first/second/third/NewFile ???");
 //	renameCommand.execute(fileSystem);
-//	RmCommand rmCommand("/first/second/third");
-//	rmCommand.execute(fileSystem);
+	RmCommand("/first/second").execute(fileSystem);
 	//CdCommand cdCommand("/first/second");
 	//cdCommand.execute(fileSystem);
 	//cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	//CdCommand cdCommand1("/..");
 	//cdCommand1.execute(fileSystem);
-	MvCommand("/first/second/third/NewFile /first").execute(fileSystem);
 	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
 	return 0;
 }
