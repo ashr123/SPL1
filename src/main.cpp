@@ -1,8 +1,8 @@
 #include <iostream>
-#include "../include/Environment.h"
+#include "Environment.h"
 // ... You may not change this file
 
-unsigned int verbose=1;
+unsigned int verbose=0;
 
 int main(int, char **)
 {

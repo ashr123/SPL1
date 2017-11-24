@@ -4,12 +4,12 @@ CC=g++
 CFLAGS=-g -Wall -Weffc++ -std=c++11 -c -Iinclude -o
 LFLAGS=-L/usr/lib
 
-all: First Hello
-Hello: bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o 
+all: First fs
+fs: bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o 
 	@echo -e '${GREEN}Invoking: C++ Linker${NC}'
-	$(CC) -o bin/Hello bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o $(LFLAGS)
+	$(CC) -o bin/fs bin/FileSystem.o bin/Commands.o bin/main.o bin/Files.o bin/Environment.o $(LFLAGS)
 	@echo ''
-	@echo -e '\e[105m\033[1;96mFinished building target: Hello\033[0m'
+	@echo -e '\e[105m\033[1;96mFinished building target: fs\033[0m'
 
 bin/Files.o: src/Files.cpp
 	@echo -e '${GREEN}Compiling target: Files.cpp${NC}'
@@ -37,7 +37,7 @@ bin/Commands.o: src/Commands.cpp
 	@echo ''
 
 First:
-	@echo -e '\e[105m\033[1;96mBuilding target: Hello\033[0m'
+	@echo -e '\e[105m\033[1;96mBuilding target: fs\033[0m'
 
 clean:
 	rm -f bin/*
