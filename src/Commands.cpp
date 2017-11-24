@@ -320,12 +320,14 @@ void CpCommand::execute(FileSystem &fs) const
 	getline(str, secS, ' ');
 	
 	str=istringstream(firstS);
-	//getline(str, s, '/');//for nothing to push
+	if (firstS[0]=='/')
+		getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		firstPath.push_back(s);
 	
 	str=istringstream(secS);
-	//getline(str, s, '/');//for nothing to push
+	if (secS[0]=='/')
+		getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		secPath.push_back(s);
 	
@@ -450,7 +452,7 @@ void MvCommand::execute(FileSystem &fs) const
 	{
 		str=istringstream(firstS);
 		if (firstS[0]=='/')
-		getline(str, s, '/');//for nothing to push
+			getline(str, s, '/');//for nothing to push
 		while (getline(str, s, '/'))
 			firstPath.push_back(s);
 	}
