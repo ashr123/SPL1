@@ -80,7 +80,9 @@ void Environment::start()
 		}
 		if (firstS=="history")
 		{
-			HistoryCommand("", commandsHistory).execute(fs);
+			BaseCommand * historyCommand=new HistoryCommand("", commandsHistory);
+			historyCommand->execute(fs);
+			commandsHistory.push_back(historyCommand);
 			continue;
 		}
 		if (firstS=="verbose")
@@ -97,7 +99,7 @@ void Environment::start()
 		}
 		else
 		{
-			commandsHistory.push_back(new ErrorCommand(firstS));
+			commandsHistory.push_back(new ErrorCommand(args));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 		}
 	}

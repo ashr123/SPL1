@@ -449,7 +449,8 @@ void MvCommand::execute(FileSystem &fs) const
 	if (firstS!="/")
 	{
 		str=istringstream(firstS);
-		//getline(str, s, '/');//for nothing to push
+		if (firstS[0]=='/')
+		getline(str, s, '/');//for nothing to push
 		while (getline(str, s, '/'))
 			firstPath.push_back(s);
 	}
@@ -462,7 +463,8 @@ void MvCommand::execute(FileSystem &fs) const
 	if (secS!="/")
 	{
 		str=istringstream(secS);
-		//getline(str, s, '/');//for nothing to push
+		if (secS[0]=='/')
+			getline(str, s, '/');//for nothing to push
 		while (getline(str, s, '/'))
 			secPath.push_back(s);
 	}
@@ -604,10 +606,10 @@ void RenameCommand::execute(FileSystem &fs) const
 	while (getline(str, s, '/'))
 		v.push_back(s);
 	string oldName=v[v.size()-1].substr(0, v[v.size()-1].find(' '));
-	string newName=v[v.size()-1].substr(v[v.size()-1].find(' '));
+	string newName=v[v.size()-1].substr(v[v.size()-1].find(' ')+1);
 	if (curr->getName()==oldName)
 	{
-		cout<<"“Can’t rename the working directory"<<endl;
+		cout<<"Can’t rename the working directory"<<endl;
 		return;
 	}
 	for (unsigned int i=0; i<v.size()-1; i++)
@@ -636,6 +638,11 @@ void RenameCommand::execute(FileSystem &fs) const
 			return;
 		}
 	}
+	
+	for (unsigned int j=0; j<curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName()==newName)
+			return;
+	
 	bool change=false;
 	for (unsigned int j=0; j<curr->getChildren().size(); j++)
 		if (curr->getChildren()[j]->getName()==oldName)
@@ -699,6 +706,7 @@ void RmCommand::execute(FileSystem &fs) const
 			curr=curr->getParent();
 			i++;
 		}
+		
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==v[i])
 				if (curr->getChildren()[j]->isDir())
@@ -779,7 +787,10 @@ ErrorCommand::ErrorCommand(string args) : BaseCommand(move(args))
 
 void ErrorCommand::execute(FileSystem &fs) const
 {
-	cout<<getArgs()<<": Unknown command"<<endl;
+	istringstream str(getArgs());
+	string s;
+	getline(str, s, ' ');
+	cout<<s<<": Unknown command"<<endl;
 }
 
 string ErrorCommand::toString() const
