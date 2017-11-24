@@ -475,12 +475,6 @@ void MvCommand::execute(FileSystem &fs) const
 	else
 		curr=&fs.getWorkingDirectory();
 	
-	if (fs.getWorkingDirectory().getAbsolutePath().find(firstS)!=string::npos)
-	{
-		cout<<"Can’t move directory"<<endl;
-		return;
-	}
-	
 	for (unsigned int i=0; i<firstPath.size()-1; i++)
 	{
 		bool find=false;
@@ -507,6 +501,10 @@ void MvCommand::execute(FileSystem &fs) const
 			return;
 		}
 	}
+	
+	if (firstPath[firstPath.size()-1]=="..")
+		curr=curr->getParent();
+	
 	BaseFile *source=nullptr;
 	for (unsigned int j=0; j<curr->getChildren().size(); j++)
 		if (curr->getChildren()[j]->getName()==firstPath[firstPath.size()-1])
@@ -518,7 +516,18 @@ void MvCommand::execute(FileSystem &fs) const
 		}
 	if (!source)
 	{
+		if (firstPath[firstPath.size()-1]==".." && fs.getWorkingDirectory().getAbsolutePath().find(curr->getAbsolutePath())!=string::npos)
+		{
+			cout<<"Can’t move directory"<<endl;
+			return;
+		}
 		cout<<"No such file or directory"<<endl;
+		return;
+	}
+	
+	if (dynamic_cast<Directory *>(source) && fs.getWorkingDirectory().getAbsolutePath().find(((Directory *)source)->getAbsolutePath())!=string::npos)
+	{
+		cout<<"Can’t move directory"<<endl;
 		return;
 	}
 	
