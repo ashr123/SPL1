@@ -153,9 +153,9 @@ void LsCommand::execute(FileSystem &fs) const
 	for (unsigned int j=0; j<curr->getChildren().size(); j++)
 	{
 		if (curr->getChildren()[j]->isDir())
-			cout<<"DIR\t"<<curr->getChildren()[j]->getName()<<"\t"<<curr->getChildren()[j]->getSize()<<endl;
+			cout<<"DIR\t"<<curr->getChildren()[j]->getName()<<'\t'<<curr->getChildren()[j]->getSize()<<endl;
 		else
-			cout<<"FILE\t"<<curr->getChildren()[j]->getName()<<"\t"<<curr->getChildren()[j]->getSize()<<endl;
+			cout<<"FILE\t"<<curr->getChildren()[j]->getName()<<'\t'<<curr->getChildren()[j]->getSize()<<endl;
 	}
 }
 
@@ -458,7 +458,7 @@ void MvCommand::execute(FileSystem &fs) const
 	}
 	else
 	{
-		cout<<"Can’t move directory"<<endl;
+		cout<<"Can't move directory"<<endl;
 		return;
 	}
 	
@@ -522,7 +522,7 @@ void MvCommand::execute(FileSystem &fs) const
 	{
 		if (firstPath[firstPath.size()-1]==".." && fs.getWorkingDirectory().getAbsolutePath().find(curr->getAbsolutePath())!=string::npos)
 		{
-			cout<<"Can’t move directory"<<endl;
+			cout<<"Can't move directory"<<endl;
 			return;
 		}
 		cout<<"No such file or directory"<<endl;
@@ -531,7 +531,7 @@ void MvCommand::execute(FileSystem &fs) const
 	
 	if (dynamic_cast<Directory *>(source) && fs.getWorkingDirectory().getAbsolutePath().find(((Directory *)source)->getAbsolutePath())!=string::npos)
 	{
-		cout<<"Can’t move directory"<<endl;
+		cout<<"Can't move directory"<<endl;
 		return;
 	}
 	
@@ -611,7 +611,7 @@ void RenameCommand::execute(FileSystem &fs) const
 	string newName=v[v.size()-1].substr(v[v.size()-1].find(' ')+1);
 	if (curr->getName()==oldName)
 	{
-		cout<<"Can’t rename the working directory"<<endl;
+		cout<<"Can't rename the working directory"<<endl;
 		return;
 	}
 	for (unsigned int i=0; i<v.size()-1; i++)
@@ -681,7 +681,7 @@ void RmCommand::execute(FileSystem &fs) const
 		curr=&fs.getRootDirectory();
 		if (s=="/")
 		{
-			cout<<"Can’t remove directory"<<endl;
+			cout<<"Can't remove directory"<<endl;
 			return;
 		}
 		getline(str, s, '/');
@@ -692,7 +692,7 @@ void RmCommand::execute(FileSystem &fs) const
 		v.push_back(s);
 	if (fs.getWorkingDirectory().getAbsolutePath().find(v[v.size()-1])!=string::npos)
 	{
-		cout<<"Can’t remove directory"<<endl;
+		cout<<"Can't remove directory"<<endl;
 		return;
 	}
 	for (unsigned int i=0; i<v.size()-1; i++)
