@@ -128,14 +128,8 @@ void Environment::copy(const Environment &other)
 
 void Environment::clear()
 {
-//	for (int i=0; i<commandsHistory.size(); ++i)
-//	{
-//		delete commandsHistory[i];
-//		commandsHistory.erase(commandsHistory.begin()+i);
-//	}
 	for (auto &command : commandsHistory)
 		delete command;
-	//commandsHistory.erase(commandsHistory.begin(), commandsHistory.end());
 	commandsHistory.clear();
 }
 
@@ -156,8 +150,6 @@ Environment::Environment(Environment &&other) : commandsHistory(move(other.comma
 {
 	if (verbose==1 || verbose==3)
 		cout<<"Environment::Environment(Environment &&other)"<<endl;
-	//clear();
-	//copy(other);
 }
 
 Environment &Environment::operator=(const Environment &other)
@@ -181,8 +173,8 @@ Environment &Environment::operator=(Environment &&other)
 	if (this!=&other)
 	{
 		clear();
-		copy(other);
-		fs=FileSystem(other.fs);
+		commandsHistory=move(other.commandsHistory);
+		fs=move(other.fs);
 	}
 	
 	return *this;

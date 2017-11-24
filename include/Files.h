@@ -70,6 +70,8 @@ public:
 	int getSize() const;
 	
 	virtual bool isDir() const;
+	
+	//~File();
 };
 
 /**

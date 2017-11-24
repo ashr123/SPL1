@@ -40,6 +40,12 @@ bool File::isDir() const
 	return false;
 }
 
+//File::~File()
+//{
+//	if (verbose==1 || verbose==3)
+//		cout<<"File::~File()"<<endl;
+//}
+
 Directory::Directory(string name, Directory *parent) : BaseFile(move(name)), children(), parent(parent)
 {
 }
@@ -60,11 +66,6 @@ void Directory::clear()
 {
 	for (auto &child : children)
 		delete child;
-//	for (unsigned int i=0; i<children.size(); i++)
-//	{
-//		delete children[i];
-//		children.erase(children.begin());
-//	}
 	children.clear();
 }
 
@@ -80,7 +81,6 @@ Directory::Directory(Directory &&other) : BaseFile(move(other.getName())), child
 {
 	if (verbose==1 || verbose==3)
 		cout<<"Directory::Directory(Directory &&other)"<<endl;
-	//copy(other);
 	for (unsigned int i=0; i<other.parent->children.size(); i++)
 		if (&other==other.parent->children[i])
 		{
@@ -96,7 +96,6 @@ Directory &Directory::operator=(const Directory &other)
 		cout<<"Directory &Directory::operator=(const Directory &other)"<<endl;
 	if (this!=&other)
 	{
-		clear();
 		copy(other);
 		parent=/*other.parent*/nullptr;
 		setName(other.getName());

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Environment.h"
+#include /*"../include/*/"Environment.h"
 // ... You may not change this file
 
 unsigned int verbose=0;
@@ -35,5 +35,12 @@ int main(int, char **)
 //	//CdCommand cdCommand1("/..");
 //	//cdCommand1.execute(fileSystem);
 //	cout<<fileSystem.getWorkingDirectory().getAbsolutePath()<<endl;
+
+//	Directory *a(new Directory("1", nullptr)),
+//			*b(new Directory(*a)), c("c", a);
+//	a->addFile(new File("f", 20));
+//	*a=Directory("c", a);
+//	delete a;
+//	delete b;
 	return 0;
 }
