@@ -35,10 +35,10 @@ int File::getSize() const
 	return size;
 }
 
-bool File::isDir() const
-{
-	return false;
-}
+//bool File::isDir() const
+//{
+//	return false;
+//}
 
 //File::~File()
 //{
@@ -210,10 +210,10 @@ string Directory::getAbsolutePath() const
 	return parent->getAbsolutePath()+(parent->parent!=nullptr ? "/" : "")+getName();
 }
 
-bool Directory::isDir() const
-{
-	return true;
-}
+//bool Directory::isDir() const
+//{
+//	return true;
+//}
 
 void Directory::dropChildAt(unsigned int index)
 {

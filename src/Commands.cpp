@@ -70,7 +70,7 @@ void CdCommand::execute(FileSystem &fs) const
 		{//for name
 			for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
 				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
-					if (fs.getWorkingDirectory().getChildren().at(i)->isDir())
+					if (dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)))
 					{
 						fs.setWorkingDirectory((Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
 						find=true;
@@ -135,7 +135,7 @@ void LsCommand::execute(FileSystem &fs) const
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==v[i])
-				if (curr->getChildren()[j]->isDir())
+				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
 					curr=(Directory *)curr->getChildren()[j];
 					find=true;
@@ -152,7 +152,7 @@ void LsCommand::execute(FileSystem &fs) const
 		((Directory *)curr)->sortByName();
 	for (unsigned int j=0; j<curr->getChildren().size(); j++)
 	{
-		if (curr->getChildren()[j]->isDir())
+		if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 			cout<<"DIR\t"<<curr->getChildren()[j]->getName()<<'\t'<<curr->getChildren()[j]->getSize()<<endl;
 		else
 			cout<<"FILE\t"<<curr->getChildren()[j]->getName()<<'\t'<<curr->getChildren()[j]->getSize()<<endl;
@@ -210,7 +210,7 @@ void MkdirCommand::execute(FileSystem &fs) const
 					cout<<"The directory already exists"<<endl;
 					return;
 				}
-				if (curr->getChildren()[j]->isDir())
+				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
 					curr=(Directory *)curr->getChildren()[j];
 					find=true;
@@ -275,7 +275,7 @@ void MkfileCommand::execute(FileSystem &fs) const
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==v[i])
-				if (curr->getChildren()[j]->isDir())
+				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
 					curr=(Directory *)curr->getChildren()[j];
 					find=true;
@@ -354,7 +354,7 @@ void CpCommand::execute(FileSystem &fs) const
 			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
+			if (curr->getChildren()[j]->getName()==firstPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
 				curr=(Directory *)curr->getChildren()[j];
 				find=true;
@@ -402,7 +402,7 @@ void CpCommand::execute(FileSystem &fs) const
 			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==secPath[i] && curr->getChildren()[j]->isDir())
+			if (curr->getChildren()[j]->getName()==secPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
 				curr=(Directory *)curr->getChildren()[j];
 				find=true;
@@ -493,7 +493,7 @@ void MvCommand::execute(FileSystem &fs) const
 			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
+			if (curr->getChildren()[j]->getName()==firstPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
 				curr=(Directory *)curr->getChildren()[j];
 				find=true;
@@ -562,7 +562,7 @@ void MvCommand::execute(FileSystem &fs) const
 			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==secPath[i] && curr->getChildren()[j]->isDir())
+			if (curr->getChildren()[j]->getName()==secPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
 				curr=(Directory *)curr->getChildren()[j];
 				find=true;
@@ -629,7 +629,7 @@ void RenameCommand::execute(FileSystem &fs) const
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==v[i])
-				if (curr->getChildren()[j]->isDir())
+				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
 					curr=(Directory *)curr->getChildren()[j];
 					find=true;
@@ -711,7 +711,7 @@ void RmCommand::execute(FileSystem &fs) const
 		
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==v[i])
-				if (curr->getChildren()[j]->isDir())
+				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
 					curr=(Directory *)curr->getChildren()[j];
 					find=true;

@@ -40,10 +40,10 @@ public:
 	 */
 	virtual int getSize() const =0;
 	
-	/**
-	 * @return true if this BaseFile is directory, false otherwise
-	 */
-	virtual bool isDir() const =0;
+//	/**
+//	 * @return true if this BaseFile is directory, false otherwise
+//	 */
+//	virtual bool isDir() const =0;
 	
 	/**
 	 * Destructor
@@ -69,7 +69,7 @@ public:
 	
 	int getSize() const;
 	
-	virtual bool isDir() const;
+	//virtual bool isDir() const;
 	
 	//~File();
 };
@@ -178,7 +178,7 @@ public:
 	 */
 	string getAbsolutePath() const;
 	
-	virtual bool isDir() const;
+	//virtual bool isDir() const;
 	
 	/**
 	 * Drops a child from children at specific index
