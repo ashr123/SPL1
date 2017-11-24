@@ -74,14 +74,13 @@ void Environment::start()
 		}
 		if (firstS=="rm")
 		{
-			commandsHistory.push_back(new CpCommand(secS));
+			commandsHistory.push_back(new RmCommand(secS));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}
 		if (firstS=="history")
 		{
-			commandsHistory.push_back(new HistoryCommand("", commandsHistory));
-			commandsHistory[commandsHistory.size()-1]->execute(fs);
+			HistoryCommand("", commandsHistory).execute(fs);
 			continue;
 		}
 		if (firstS=="verbose")
@@ -92,7 +91,7 @@ void Environment::start()
 		}
 		if (firstS=="exec")
 		{
-			commandsHistory.push_back(new ExecCommand("", commandsHistory));
+			commandsHistory.push_back(new ExecCommand(secS, commandsHistory));
 			commandsHistory[commandsHistory.size()-1]->execute(fs);
 			continue;
 		}

@@ -45,13 +45,16 @@ CdCommand::CdCommand(string args) : BaseCommand(move(args))
 void CdCommand::execute(FileSystem &fs) const
 {
 	istringstream str(getArgs());
-	string s(getArgs());
+	string s;
 	bool find;
-	if (s[0]=='/')
+	if (getArgs()[0]=='/')
 	{
 		getline(str, s, '/');
 		fs.setWorkingDirectory(&fs.getRootDirectory());
+		if (getArgs()=="/")
+			return;
 	}
+	;
 	getline(str, s, '/');
 	do
 	{
@@ -128,7 +131,7 @@ void LsCommand::execute(FileSystem &fs) const
 				return;
 			}
 			curr=curr->getParent();
-			i++;
+			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==v[i])
@@ -185,9 +188,10 @@ void MkdirCommand::execute(FileSystem &fs) const
 		curr=&fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		c.push_back(s);
-	bool find=false;
+	
 	for (unsigned int i=0; i<c.size(); i++)
 	{
+		bool find=false;
 		if (c[i]=="..")
 		{
 			if (curr->getParent()==nullptr)
@@ -200,13 +204,23 @@ void MkdirCommand::execute(FileSystem &fs) const
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==c[i])
+			{
+				if (i==c.size()-1)
+				{
+					cout<<"The directory already exists"<<endl;
+					return;
+				}
 				if (curr->getChildren()[j]->isDir())
 				{
 					curr=(Directory *)curr->getChildren()[j];
 					find=true;
-					if (i==c.size())
-						cout<<"The directory already exists"<<endl;
 				}
+				else
+				{
+					cout<<"The directory already exists"<<endl;
+					return;
+				}
+			}
 		if (!find)
 		{
 			curr->addFile(new Directory(c[i], curr));
@@ -335,7 +349,7 @@ void CpCommand::execute(FileSystem &fs) const
 				return;
 			}
 			curr=curr->getParent();
-			i++;
+			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
@@ -371,6 +385,7 @@ void CpCommand::execute(FileSystem &fs) const
 	}
 	else
 		curr=&fs.getWorkingDirectory();
+	
 	for (unsigned int i=0; i<secPath.size(); i++)
 	{
 		bool find=false;
@@ -382,7 +397,7 @@ void CpCommand::execute(FileSystem &fs) const
 				return;
 			}
 			curr=curr->getParent();
-			i++;
+			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==secPath[i] && curr->getChildren()[j]->isDir())
@@ -397,6 +412,9 @@ void CpCommand::execute(FileSystem &fs) const
 			return;
 		}
 	}
+	for (unsigned int i=0; i<curr->getChildren().size(); i++)
+		if (curr->getChildren()[i]->getName()==source->getName())
+			return;
 	if (dynamic_cast<Directory *>(source))
 		curr->addFile(new Directory(*(Directory *)source));
 	else
@@ -428,15 +446,26 @@ void MvCommand::execute(FileSystem &fs) const
 	getline(str, firstS, ' ');
 	getline(str, secS, ' ');
 	
-	str=istringstream(firstS);
-	//getline(str, s, '/');//for nothing to push
-	while (getline(str, s, '/'))
-		firstPath.push_back(s);
+	if (firstS!="/")
+	{
+		str=istringstream(firstS);
+		//getline(str, s, '/');//for nothing to push
+		while (getline(str, s, '/'))
+			firstPath.push_back(s);
+	}
+	else
+	{
+		cout<<"Can’t move directory"<<endl;
+		return;
+	}
 	
-	str=istringstream(secS);
-	//getline(str, s, '/');//for nothing to push
-	while (getline(str, s, '/'))
-		secPath.push_back(s);
+	if (secS!="/")
+	{
+		str=istringstream(secS);
+		//getline(str, s, '/');//for nothing to push
+		while (getline(str, s, '/'))
+			secPath.push_back(s);
+	}
 	
 	if (firstS[0]=='/')//Absolute path
 	{
@@ -446,7 +475,7 @@ void MvCommand::execute(FileSystem &fs) const
 	else
 		curr=&fs.getWorkingDirectory();
 	
-	if (fs.getWorkingDirectory().getAbsolutePath().find(secPath[secPath.size()-1])!=string::npos)
+	if (fs.getWorkingDirectory().getAbsolutePath().find(firstS)!=string::npos)
 	{
 		cout<<"Can’t move directory"<<endl;
 		return;
@@ -463,7 +492,7 @@ void MvCommand::execute(FileSystem &fs) const
 				return;
 			}
 			curr=curr->getParent();
-			i++;
+			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==firstPath[i] && curr->getChildren()[j]->isDir())
@@ -498,6 +527,11 @@ void MvCommand::execute(FileSystem &fs) const
 	{
 		curr=&fs.getRootDirectory();
 		getline(str, s, '/');
+		if (secS=="/")
+		{
+			curr->addFile(source);
+			sourceParent->dropChildAt(sourceLocationAtfirstS);
+		}
 	}
 	else
 		curr=&fs.getWorkingDirectory();
@@ -512,7 +546,7 @@ void MvCommand::execute(FileSystem &fs) const
 				return;
 			}
 			curr=curr->getParent();
-			i++;
+			continue;
 		}
 		for (unsigned int j=0; j<curr->getChildren().size(); j++)
 			if (curr->getChildren()[j]->getName()==secPath[i] && curr->getChildren()[j]->isDir())
@@ -627,6 +661,11 @@ void RmCommand::execute(FileSystem &fs) const
 	if (s[0]=='/')
 	{
 		curr=&fs.getRootDirectory();
+		if (s=="/")
+		{
+			cout<<"Can’t remove directory"<<endl;
+			return;
+		}
 		getline(str, s, '/');
 	}
 	else
