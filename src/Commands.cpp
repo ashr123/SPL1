@@ -760,6 +760,11 @@ BaseCommand *HistoryCommand::clone() const
 	return new HistoryCommand(getArgs(), history);
 }
 
+HistoryCommand *HistoryCommand::clone(const vector<BaseCommand *> &history)
+{
+	return new HistoryCommand(getArgs(), history);
+}
+
 VerboseCommand::VerboseCommand(string args) : BaseCommand(move(args))
 {
 }
@@ -825,6 +830,11 @@ string ExecCommand::toString() const
 }
 
 BaseCommand *ExecCommand::clone() const
+{
+	return new ExecCommand(getArgs(), history);
+}
+
+ExecCommand *ExecCommand::clone(const vector<BaseCommand *> &history)
 {
 	return new ExecCommand(getArgs(), history);
 }

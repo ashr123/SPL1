@@ -166,6 +166,8 @@ public:
 	string toString() const;
 	
 	virtual BaseCommand * clone() const;
+	
+	HistoryCommand *clone(const vector<BaseCommand *> &history);
 };
 
 
@@ -206,6 +208,8 @@ public:
 	string toString() const;
 	
 	virtual BaseCommand * clone() const;
+	
+	ExecCommand *clone(const vector<BaseCommand *> &history);
 };
 
 #endif

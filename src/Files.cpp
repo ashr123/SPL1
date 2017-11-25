@@ -87,6 +87,11 @@ Directory::Directory(Directory &&other) : BaseFile(move(other.getName())), child
 			other.parent->children[i]=this;
 			break;
 		}
+	
+	for (auto &child : children)
+		if (dynamic_cast<Directory *>(child))
+			((Directory *)child)->parent=this;
+	
 	other.parent=nullptr;
 }
 
@@ -96,6 +101,7 @@ Directory &Directory::operator=(const Directory &other)
 		cout<<"Directory &Directory::operator=(const Directory &other)"<<endl;
 	if (this!=&other)
 	{
+		clear();
 		copy(other);
 		parent=/*other.parent*/nullptr;
 		setName(other.getName());
@@ -112,6 +118,17 @@ Directory &Directory::operator=(Directory &&other)
 	{
 		clear();
 		children=move(other.children);
+		for (unsigned int i=0; i<parent->children.size(); i++)
+			if (this==parent->children[i])
+			{
+				parent->children.erase(parent->children.begin()+i);
+				break;
+			}
+		
+		for (auto &child : children)
+			if (dynamic_cast<Directory *>(child))
+				((Directory *)child)->parent=this;
+		
 		parent=other.parent;
 		setName(other.getName());
 		for (unsigned int i=0; i<other.parent->children.size(); i++)

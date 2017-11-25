@@ -123,7 +123,14 @@ const std::vector<BaseCommand *> &Environment::getHistory() const
 void Environment::copy(const Environment &other)
 {
 	for (auto &command : other.commandsHistory)
-		commandsHistory.push_back(command->clone());
+	{
+		if (dynamic_cast<HistoryCommand *>(command))
+			commandsHistory.push_back(((HistoryCommand *)command)->clone(commandsHistory));
+		if (dynamic_cast<ExecCommand *>(command))
+			commandsHistory.push_back(((ExecCommand *)command)->clone(commandsHistory));
+		else
+			commandsHistory.push_back(command->clone());
+	}
 }
 
 void Environment::clear()
@@ -141,7 +148,7 @@ Environment::Environment(const Environment &other) : commandsHistory(), fs(other
 {
 	if (verbose==1 || verbose==3)
 		cout<<"Environment::Environment(const Environment &other)"<<endl;
-	clear();
+	//clear();
 	copy(other);
 }
 
@@ -160,7 +167,7 @@ Environment &Environment::operator=(const Environment &other)
 	{
 		clear();
 		copy(other);
-		fs=FileSystem(other.fs);
+		fs=other.fs;
 	}
 	
 	return *this;
