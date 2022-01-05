@@ -24,12 +24,12 @@ PwdCommand::PwdCommand(string args) : BaseCommand(move(args))
 
 void PwdCommand::execute(FileSystem &fs) const
 {
-	cout<<fs.getWorkingDirectory().getAbsolutePath()<<endl;
+	cout << fs.getWorkingDirectory().getAbsolutePath() << endl;
 }
 
 string PwdCommand::toString() const
 {
-	return "pwd "+getArgs();
+	return "pwd " + getArgs();
 }
 
 BaseCommand *PwdCommand::clone() const
@@ -47,48 +47,46 @@ void CdCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s;
 	bool find;
-	if (getArgs()[0]=='/')
+	if (getArgs()[0] == '/')
 	{
 		getline(str, s, '/');
 		fs.setWorkingDirectory(&fs.getRootDirectory());
-		if (getArgs()=="/")
+		if (getArgs() == "/")
 			return;
-	}
-	;
+	};
 	getline(str, s, '/');
 	do
 	{
-		find=false;
-		if (s=="..")
+		find = false;
+		if (s == "..")
 		{
-			if (&fs.getWorkingDirectory()!=&fs.getRootDirectory())
+			if (&fs.getWorkingDirectory() != &fs.getRootDirectory())
 				fs.setWorkingDirectory(fs.getWorkingDirectory().getParent());
 			else
-				cout<<"The system cannot find the path specified"<<endl;
-		}
-		else
+				cout << "The system cannot find the path specified" << endl;
+		} else
 		{//for name
-			for (unsigned int i=0; i<fs.getWorkingDirectory().getChildren().size(); i++)
-				if (fs.getWorkingDirectory().getChildren().at(i)->getName()==s)
+			for (unsigned int i = 0; i < fs.getWorkingDirectory().getChildren().size(); i++)
+				if (fs.getWorkingDirectory().getChildren().at(i)->getName() == s)
 					if (dynamic_cast<Directory *>(fs.getWorkingDirectory().getChildren().at(i)))
 					{
-						fs.setWorkingDirectory((Directory *)(fs.getWorkingDirectory().getChildren().at(i)));
-						find=true;
+						fs.setWorkingDirectory((Directory *) (fs.getWorkingDirectory().getChildren().at(i)));
+						find = true;
 					}
 			if (!find)
 			{
-				cout<<"The system cannot find the path specified"<<endl;
+				cout << "The system cannot find the path specified" << endl;
 				break;
 			}
 		}
-		
+
 	} while (getline(str, s, '/'));
 }
 
 
 string CdCommand::toString() const
 {
-	return "cd "+getArgs();
+	return "cd " + getArgs();
 }
 
 BaseCommand *CdCommand::clone() const
@@ -106,62 +104,61 @@ void LsCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s(getArgs()), order;
 	Directory *curr;
-	if (s[0]=='-')
+	if (s[0] == '-')
 	{
 		getline(str, order, ' ');
-		s=s.size()<3 ? "" : s.substr(3);
+		s = s.size() < 3 ? "" : s.substr(3);
 	}
-	if (!s.empty() && s[0]=='/')//Absolute path
+	if (!s.empty() && s[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
+	} else
+		curr = &fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	for (unsigned int i=0; i<v.size(); i++)
+	for (auto &i: v)
 	{
-		bool find=false;
-		if (v[i]=="..")
+		bool find = false;
+		if (i == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"The system cannot find the path specified"<<endl;
+				cout << "The system cannot find the path specified" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			continue;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==v[i])
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == i)
 				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
-					curr=(Directory *)curr->getChildren()[j];
-					find=true;
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
 				}
 		if (!find)
 		{
-			cout<<"The system cannot find the path specified"<<endl;
+			cout << "The system cannot find the path specified" << endl;
 			return;
 		}
 	}
-	if (order=="-s")
-		((Directory *)curr)->sortBySize();
+	if (order == "-s")
+		((Directory *) curr)->sortBySize();
 	else
-		((Directory *)curr)->sortByName();
-	for (unsigned int j=0; j<curr->getChildren().size(); j++)
+		((Directory *) curr)->sortByName();
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
 	{
 		if (dynamic_cast<Directory *>(curr->getChildren()[j]))
-			cout<<"DIR\t"<<curr->getChildren()[j]->getName()<<'\t'<<curr->getChildren()[j]->getSize()<<endl;
+			cout << "DIR\t" << curr->getChildren()[j]->getName() << '\t' << curr->getChildren()[j]->getSize() << endl;
 		else
-			cout<<"FILE\t"<<curr->getChildren()[j]->getName()<<'\t'<<curr->getChildren()[j]->getSize()<<endl;
+			cout << "FILE\t" << curr->getChildren()[j]->getName() << '\t' << curr->getChildren()[j]->getSize() << endl;
 	}
 }
 
 string LsCommand::toString() const
 {
-	return "ls "+getArgs();
+	return "ls " + getArgs();
 }
 
 BaseCommand *LsCommand::clone() const
@@ -179,59 +176,57 @@ void MkdirCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s(getArgs());
 	Directory *curr;
-	if (s[0]=='/')//Absolute path
+	if (s[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
+	} else
+		curr = &fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		c.push_back(s);
-	
-	for (unsigned int i=0; i<c.size(); i++)
+
+	for (unsigned int i = 0; i < c.size(); i++)
 	{
-		bool find=false;
-		if (c[i]=="..")
+		bool find = false;
+		if (c[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"The system cannot find the path specified"<<endl;
+				cout << "The system cannot find the path specified" << endl;
 				break;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			i++;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==c[i])
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == c[i])
 			{
-				if (i==c.size()-1)
+				if (i == c.size() - 1)
 				{
-					cout<<"The directory already exists"<<endl;
+					cout << "The directory already exists" << endl;
 					return;
 				}
 				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
-					curr=(Directory *)curr->getChildren()[j];
-					find=true;
-				}
-				else
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
+				} else
 				{
-					cout<<"The directory already exists"<<endl;
+					cout << "The directory already exists" << endl;
 					return;
 				}
 			}
 		if (!find)
 		{
 			curr->addFile(new Directory(c[i], curr));
-			curr=(Directory *)curr->getChildren()[curr->getChildren().size()-1];
+			curr = (Directory *) curr->getChildren()[curr->getChildren().size() - 1];
 		}
 	}
 }
 
 string MkdirCommand::toString() const
 {
-	return "mkdir "+getArgs();
+	return "mkdir " + getArgs();
 }
 
 BaseCommand *MkdirCommand::clone() const
@@ -249,47 +244,46 @@ void MkfileCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s(getArgs());
 	Directory *curr;
-	if (s[0]=='/')//Absolute path
+	if (s[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
+	} else
+		curr = &fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	string newFile=v[v.size()-1].substr(0, v[v.size()-1].find(' '));
-	string fileSize=v[v.size()-1].substr(v[v.size()-1].find(' ')+1);
-	for (unsigned int i=0; i<v.size()-1; i++)
+	string newFile = v[v.size() - 1].substr(0, v[v.size() - 1].find(' '));
+	string fileSize = v[v.size() - 1].substr(v[v.size() - 1].find(' ') + 1);
+	for (unsigned int i = 0; i < v.size() - 1; i++)
 	{
-		bool find=false;
-		if (v[i]=="..")
+		bool find = false;
+		if (v[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"The system cannot find the path specified"<<endl;
+				cout << "The system cannot find the path specified" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			i++;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==v[i])
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == v[i])
 				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
-					curr=(Directory *)curr->getChildren()[j];
-					find=true;
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
 				}
 		if (!find)
 		{
-			cout<<"The system cannot find the path specified"<<endl;
+			cout << "The system cannot find the path specified" << endl;
 			return;
 		}
 	}
-	for (unsigned int j=0; j<curr->getChildren().size(); j++)
-		if (curr->getChildren()[j]->getName()==newFile)
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName() == newFile)
 		{
-			cout<<"File already exists"<<endl;
+			cout << "File already exists" << endl;
 			return;
 		}
 	curr->addFile(new File(newFile, atoi(fileSize.c_str())));
@@ -297,7 +291,7 @@ void MkfileCommand::execute(FileSystem &fs) const
 
 string MkfileCommand::toString() const
 {
-	return "mkfile "+getArgs();
+	return "mkfile " + getArgs();
 }
 
 BaseCommand *MkfileCommand::clone() const
@@ -315,117 +309,116 @@ void CpCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string firstS, secS, s;
 	Directory *curr;
-	
+
 	getline(str, firstS, ' ');
 	getline(str, secS, ' ');
-	
-	str=istringstream(firstS);
-	if (firstS[0]=='/')
+
+	str = istringstream(firstS);
+	if (firstS[0] == '/')
 		getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		firstPath.push_back(s);
-	
-	str=istringstream(secS);
-	if (secS[0]=='/')
+
+	str = istringstream(secS);
+	if (secS[0] == '/')
 		getline(str, s, '/');//for nothing to push
 	while (getline(str, s, '/'))
 		secPath.push_back(s);
-	
+
 	//Finding source
-	if (firstS[0]=='/')//Absolute path
+	if (firstS[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
-	
-	for (unsigned int i=0; i<firstPath.size()-1; i++)
+	} else
+		curr = &fs.getWorkingDirectory();
+
+	for (unsigned int i = 0; i < firstPath.size() - 1; i++)
 	{
-		bool find=false;
-		if (firstPath[i]=="..")
+		bool find = false;
+		if (firstPath[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"No such file or directory"<<endl;
+				cout << "No such file or directory" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			continue;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==firstPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == firstPath[i] &&
+				dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
-				curr=(Directory *)curr->getChildren()[j];
-				find=true;
+				curr = (Directory *) curr->getChildren()[j];
+				find = true;
 				break;
 			}
 		if (!find)
 		{
-			cout<<"No such file or directory"<<endl;
+			cout << "No such file or directory" << endl;
 			return;
 		}
 	}
-	BaseFile *source=nullptr;
-	for (unsigned int j=0; j<curr->getChildren().size(); j++)
-		if (curr->getChildren()[j]->getName()==firstPath[firstPath.size()-1])
+	BaseFile *source = nullptr;
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName() == firstPath[firstPath.size() - 1])
 		{
-			source=curr->getChildren()[j];
+			source = curr->getChildren()[j];
 			break;
 		}
 	if (!source)
 	{
-		cout<<"No such file or directory"<<endl;
+		cout << "No such file or directory" << endl;
 		return;
 	}
-	
+
 	//Finding destination
-	if (secS[0]=='/')//Absolute path
+	if (secS[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
-	
-	for (unsigned int i=0; i<secPath.size(); i++)
+	} else
+		curr = &fs.getWorkingDirectory();
+
+	for (unsigned int i = 0; i < secPath.size(); i++)
 	{
-		bool find=false;
-		if (secPath[i]=="..")
+		bool find = false;
+		if (secPath[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"No such file or directory"<<endl;
+				cout << "No such file or directory" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			continue;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==secPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == secPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
-				curr=(Directory *)curr->getChildren()[j];
-				find=true;
+				curr = (Directory *) curr->getChildren()[j];
+				find = true;
 				break;
 			}
 		if (!find)
 		{
-			cout<<"No such file or directory"<<endl;
+			cout << "No such file or directory" << endl;
 			return;
 		}
 	}
-	for (unsigned int i=0; i<curr->getChildren().size(); i++)
-		if (curr->getChildren()[i]->getName()==source->getName())
+	for (unsigned int i = 0; i < curr->getChildren().size(); i++)
+		if (curr->getChildren()[i]->getName() == source->getName())
 			return;
 	if (dynamic_cast<Directory *>(source))
-		curr->addFile(new Directory(*(Directory *)source));
+		curr->addFile(new Directory(*(Directory *) source));
 	else
-		curr->addFile(new File(*(File *)source));
+		curr->addFile(new File(*(File *) source));
 }
 
 string CpCommand::toString() const
 {
-	return "cp "+getArgs();
+	return "cp " + getArgs();
 }
 
 BaseCommand *CpCommand::clone() const
@@ -442,137 +435,137 @@ void MvCommand::execute(FileSystem &fs) const
 	vector<string> firstPath, secPath;
 	istringstream str(getArgs());
 	string firstS, secS, s;
-	Directory *curr=nullptr, *sourceParent=nullptr;
-	unsigned int sourceLocationAtfirstS=0;
-	
+	Directory *curr = nullptr, *sourceParent = nullptr;
+	unsigned int sourceLocationAtfirstS = 0;
+
 	getline(str, firstS, ' ');
 	getline(str, secS, ' ');
-	
-	if (firstS!="/")
+
+	if (firstS != "/")
 	{
-		str=istringstream(firstS);
-		if (firstS[0]=='/')
+		str = istringstream(firstS);
+		if (firstS[0] == '/')
 			getline(str, s, '/');//for nothing to push
 		while (getline(str, s, '/'))
 			firstPath.push_back(s);
-	}
-	else
+	} else
 	{
-		cout<<"Can't move directory"<<endl;
+		cout << "Can't move directory" << endl;
 		return;
 	}
-	
-	if (secS!="/")
+
+	if (secS != "/")
 	{
-		str=istringstream(secS);
-		if (secS[0]=='/')
+		str = istringstream(secS);
+		if (secS[0] == '/')
 			getline(str, s, '/');//for nothing to push
 		while (getline(str, s, '/'))
 			secPath.push_back(s);
 	}
-	
-	if (firstS[0]=='/')//Absolute path
+
+	if (firstS[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
-	
-	for (unsigned int i=0; i<firstPath.size()-1; i++)
+	} else
+		curr = &fs.getWorkingDirectory();
+
+	for (unsigned int i = 0; i < firstPath.size() - 1; i++)
 	{
-		bool find=false;
-		if (firstPath[i]=="..")
+		bool find = false;
+		if (firstPath[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"No such file or directory"<<endl;
+				cout << "No such file or directory" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			continue;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==firstPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == firstPath[i] &&
+				dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
-				curr=(Directory *)curr->getChildren()[j];
-				find=true;
+				curr = (Directory *) curr->getChildren()[j];
+				find = true;
 				break;
 			}
 		if (!find)
 		{
-			cout<<"No such file or directory"<<endl;
+			cout << "No such file or directory" << endl;
 			return;
 		}
 	}
-	
-	if (firstPath[firstPath.size()-1]=="..")
-		curr=curr->getParent();
-	
-	BaseFile *source=nullptr;
-	for (unsigned int j=0; j<curr->getChildren().size(); j++)
-		if (curr->getChildren()[j]->getName()==firstPath[firstPath.size()-1])
+
+	if (firstPath[firstPath.size() - 1] == "..")
+		curr = curr->getParent();
+
+	BaseFile *source = nullptr;
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName() == firstPath[firstPath.size() - 1])
 		{
-			source=curr->getChildren()[j];
-			sourceParent=curr;
-			sourceLocationAtfirstS=j;
+			source = curr->getChildren()[j];
+			sourceParent = curr;
+			sourceLocationAtfirstS = j;
 			break;
 		}
 	if (!source)
 	{
-		if (firstPath[firstPath.size()-1]==".." && fs.getWorkingDirectory().getAbsolutePath().find(curr->getAbsolutePath())!=string::npos)
+		if (firstPath[firstPath.size() - 1] == ".." &&
+			fs.getWorkingDirectory().getAbsolutePath().find(curr->getAbsolutePath()) != string::npos)
 		{
-			cout<<"Can't move directory"<<endl;
+			cout << "Can't move directory" << endl;
 			return;
 		}
-		cout<<"No such file or directory"<<endl;
+		cout << "No such file or directory" << endl;
 		return;
 	}
-	
-	if (dynamic_cast<Directory *>(source) && fs.getWorkingDirectory().getAbsolutePath().find(((Directory *)source)->getAbsolutePath())!=string::npos)
+
+	if (dynamic_cast<Directory *>(source) &&
+		fs.getWorkingDirectory().getAbsolutePath().find(((Directory *) source)->getAbsolutePath()) != string::npos)
 	{
-		cout<<"Can't move directory"<<endl;
+		cout << "Can't move directory" << endl;
 		return;
 	}
-	
+
 	//Finding destination
-	if (secS[0]=='/')//Absolute path
+	if (secS[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-		if (secS=="/")
+		if (secS == "/")
 		{
 			curr->addFile(source);
 			sourceParent->dropChildAt(sourceLocationAtfirstS);
 		}
-	}
-	else
-		curr=&fs.getWorkingDirectory();
-	for (unsigned int i=0; i<secPath.size(); i++)
+	} else
+		curr = &fs.getWorkingDirectory();
+	for (unsigned int i = 0; i < secPath.size(); i++)
 	{
-		bool find=false;
-		if (secPath[i]=="..")
+		bool find = false;
+		if (secPath[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"No such file or directory"<<endl;
+				cout << "No such file or directory" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			continue;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==secPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == secPath[i] && dynamic_cast<Directory *>(curr->getChildren()[j]))
 			{
-				curr=(Directory *)curr->getChildren()[j];
-				find=true;
+				curr = (Directory *) curr->getChildren()[j];
+				find = true;
 				curr->addFile(source);
 				sourceParent->dropChildAt(sourceLocationAtfirstS);
 				break;
 			}
 		if (!find)
 		{
-			cout<<"No such file or directory"<<endl;
+			cout << "No such file or directory" << endl;
 			return;
 		}
 	}
@@ -580,7 +573,7 @@ void MvCommand::execute(FileSystem &fs) const
 
 string MvCommand::toString() const
 {
-	return "mv "+getArgs();
+	return "mv " + getArgs();
 }
 
 BaseCommand *MvCommand::clone() const
@@ -598,67 +591,66 @@ void RenameCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s(getArgs());
 	Directory *curr;
-	if (s[0]=='/')//Absolute path
+	if (s[0] == '/')//Absolute path
 	{
-		curr=&fs.getRootDirectory();
+		curr = &fs.getRootDirectory();
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
+	} else
+		curr = &fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	string oldName=v[v.size()-1].substr(0, v[v.size()-1].find(' '));
-	string newName=v[v.size()-1].substr(v[v.size()-1].find(' ')+1);
-	if (curr->getName()==oldName)
+	string oldName = v[v.size() - 1].substr(0, v[v.size() - 1].find(' '));
+	string newName = v[v.size() - 1].substr(v[v.size() - 1].find(' ') + 1);
+	if (curr->getName() == oldName)
 	{
-		cout<<"Can't rename the working directory"<<endl;
+		cout << "Can't rename the working directory" << endl;
 		return;
 	}
-	for (unsigned int i=0; i<v.size()-1; i++)
+	for (unsigned int i = 0; i < v.size() - 1; i++)
 	{
-		bool find=false;
-		if (v[i]=="..")
+		bool find = false;
+		if (v[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"The system cannot find the path specified"<<endl;
+				cout << "The system cannot find the path specified" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			i++;
 		}
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==v[i])
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == v[i])
 				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
-					curr=(Directory *)curr->getChildren()[j];
-					find=true;
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
 				}
 		if (!find)
 		{
-			cout<<"No such file or directory"<<endl;
+			cout << "No such file or directory" << endl;
 			return;
 		}
 	}
-	
-	for (unsigned int j=0; j<curr->getChildren().size(); j++)
-		if (curr->getChildren()[j]->getName()==newName)
+
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName() == newName)
 			return;
-	
-	bool change=false;
-	for (unsigned int j=0; j<curr->getChildren().size(); j++)
-		if (curr->getChildren()[j]->getName()==oldName)
+
+	bool change = false;
+	for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+		if (curr->getChildren()[j]->getName() == oldName)
 		{
 			curr->getChildren()[j]->setName(newName);
-			change=true;
+			change = true;
 		}
 	if (!change)
-		cout<<"No such file or directory"<<endl;
+		cout << "No such file or directory" << endl;
 }
 
 string RenameCommand::toString() const
 {
-	return "rename "+getArgs();
+	return "rename " + getArgs();
 }
 
 BaseCommand *RenameCommand::clone() const
@@ -676,62 +668,61 @@ void RmCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s(getArgs());
 	Directory *curr;
-	if (s[0]=='/')
+	if (s[0] == '/')
 	{
-		curr=&fs.getRootDirectory();
-		if (s=="/")
+		curr = &fs.getRootDirectory();
+		if (s == "/")
 		{
-			cout<<"Can't remove directory"<<endl;
+			cout << "Can't remove directory" << endl;
 			return;
 		}
 		getline(str, s, '/');
-	}
-	else
-		curr=&fs.getWorkingDirectory();
+	} else
+		curr = &fs.getWorkingDirectory();
 	while (getline(str, s, '/'))
 		v.push_back(s);
-	if (fs.getWorkingDirectory().getAbsolutePath().find(v[v.size()-1])!=string::npos)
+	if (fs.getWorkingDirectory().getAbsolutePath().find(v[v.size() - 1]) != string::npos)
 	{
-		cout<<"Can't remove directory"<<endl;
+		cout << "Can't remove directory" << endl;
 		return;
 	}
-	for (unsigned int i=0; i<v.size()-1; i++)
+	for (unsigned int i = 0; i < v.size() - 1; i++)
 	{
-		bool find=false;
-		if (v[i]=="..")
+		bool find = false;
+		if (v[i] == "..")
 		{
-			if (curr->getParent()==nullptr)
+			if (curr->getParent() == nullptr)
 			{
-				cout<<"The system cannot find the path specified"<<endl;
+				cout << "The system cannot find the path specified" << endl;
 				return;
 			}
-			curr=curr->getParent();
+			curr = curr->getParent();
 			i++;
 		}
-		
-		for (unsigned int j=0; j<curr->getChildren().size(); j++)
-			if (curr->getChildren()[j]->getName()==v[i])
+
+		for (unsigned int j = 0; j < curr->getChildren().size(); j++)
+			if (curr->getChildren()[j]->getName() == v[i])
 				if (dynamic_cast<Directory *>(curr->getChildren()[j]))
 				{
-					curr=(Directory *)curr->getChildren()[j];
-					find=true;
+					curr = (Directory *) curr->getChildren()[j];
+					find = true;
 				}
 		if (!find)
 		{
-			cout<<"No such file or directory"<<endl;
+			cout << "No such file or directory" << endl;
 			return;
 		}
 	}
-	unsigned long deleted=curr->getChildren().size();
-	curr->removeFile(v[v.size()-1]);
-	if (curr->getChildren().size()==deleted)
-		cout<<"No such file or directory"<<endl;
+	unsigned long deleted = curr->getChildren().size();
+	curr->removeFile(v[v.size() - 1]);
+	if (curr->getChildren().size() == deleted)
+		cout << "No such file or directory" << endl;
 }
 
 
 string RmCommand::toString() const
 {
-	return "rm "+getArgs();
+	return "rm " + getArgs();
 }
 
 BaseCommand *RmCommand::clone() const
@@ -746,8 +737,8 @@ HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &history
 
 void HistoryCommand::execute(FileSystem &fs) const
 {
-	for (unsigned int i=0; i<history.size(); i++)
-		cout<<i<<'\t'<<history[i]->toString()<<endl;
+	for (unsigned int i = 0; i < history.size(); i++)
+		cout << i << '\t' << history[i]->toString() << endl;
 }
 
 string HistoryCommand::toString() const
@@ -771,16 +762,16 @@ VerboseCommand::VerboseCommand(string args) : BaseCommand(move(args))
 
 void VerboseCommand::execute(FileSystem &fs) const
 {
-	int temp=stoi(getArgs(), nullptr, 10);
-	if (temp<0 || temp>3)
-		cout<<"Wrong verbose input"<<endl;
+	int temp = stoi(getArgs(), nullptr, 10);
+	if (temp < 0 || temp > 3)
+		cout << "Wrong verbose input" << endl;
 	else
-		verbose=static_cast<unsigned int>(temp);
+		verbose = static_cast<unsigned int>(temp);
 }
 
 string VerboseCommand::toString() const
 {
-	return "verbose "+getArgs();
+	return "verbose " + getArgs();
 }
 
 BaseCommand *VerboseCommand::clone() const
@@ -797,7 +788,7 @@ void ErrorCommand::execute(FileSystem &fs) const
 	istringstream str(getArgs());
 	string s;
 	getline(str, s, ' ');
-	cout<<s<<": Unknown command"<<endl;
+	cout << s << ": Unknown command" << endl;
 }
 
 string ErrorCommand::toString() const
@@ -811,22 +802,22 @@ BaseCommand *ErrorCommand::clone() const
 }
 
 ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &history) : BaseCommand(move(args)),
-                                                                              history(history)
+																			  history(history)
 {
 }
 
 void ExecCommand::execute(FileSystem &fs) const
 {
-	int temp=stoi(getArgs(), nullptr, 10);
-	if (temp<0 || temp>=(int)history.size())
-		cout<<"Command not found"<<endl;
+	int temp = stoi(getArgs(), nullptr, 10);
+	if (temp < 0 || temp >= (int) history.size())
+		cout << "Command not found" << endl;
 	else
 		history[temp]->execute(fs);
 }
 
 string ExecCommand::toString() const
 {
-	return "exex "+getArgs();
+	return "exex " + getArgs();
 }
 
 BaseCommand *ExecCommand::clone() const

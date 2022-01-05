@@ -49,12 +49,12 @@ public:
 	 * @return reference to the root directory
 	 */
 	Directory &getRootDirectory() const;
-	
+
 	/**
 	 * @return reference to the working directory
 	 */
 	Directory &getWorkingDirectory() const;
-	
+
 	/**
 	 * Change the working directory of the file system
 	 * @param newWorkingDirectory the new working directory
